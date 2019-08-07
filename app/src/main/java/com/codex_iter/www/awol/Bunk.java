@@ -1,9 +1,10 @@
 package com.codex_iter.www.awol;
-import android.annotation.SuppressLint;
 import android.content.Context;
-import android.os.Parcel;
-import android.os.Parcelable;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
@@ -17,7 +18,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.Scanner;
 
 public class Bunk extends AppCompatActivity{
@@ -28,11 +28,22 @@ public class Bunk extends AppCompatActivity{
     Button target,bunk,attend;
     double absent,total,percent,present;
     ListData[] ld;
-
-
+    private TextView target_at, bunk_at, attend_at;
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        final boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        SharedPreferences theme = getSharedPreferences("theme",0);
+        boolean dark = theme.getBoolean("dark_theme", false);
+        Toast.makeText(this, String.valueOf(dark), Toast.LENGTH_SHORT).show();
+        if (useDarkTheme) {
+            if (dark)
+                setTheme(R.style.AppTheme_Dark_NoActionBar);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_bunk);
        LinearLayout ll=findViewById(R.id.ll);
@@ -44,6 +55,16 @@ public class Bunk extends AppCompatActivity{
                 return false;
             }
         });
+        target_at = findViewById(R.id.target_at);
+        bunk_at = findViewById(R.id.classes_bunk);
+        attend_at = findViewById(R.id.going_attend);
+
+        if (!dark){
+            target_at.setTextColor(Color.parseColor("#141831"));
+            bunk_at.setTextColor(Color.parseColor("#141831"));
+            attend_at.setTextColor(Color.parseColor("#141831"));
+        }
+
         this.ld=ListData.ld;
         String subn[]=new String[ld.length];
         for(int i=0;i<ld.length;i++)

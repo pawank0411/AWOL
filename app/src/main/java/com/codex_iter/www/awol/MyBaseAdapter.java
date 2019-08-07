@@ -1,6 +1,8 @@
 package com.codex_iter.www.awol;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import androidx.cardview.widget.CardView;
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -19,7 +23,6 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
     private ArrayList<ListData> myList = new ArrayList<ListData>();
     LayoutInflater inflater;
     Context context;
-
 
 
     public MyBaseAdapter(Context context, ArrayList<ListData> myList) {
@@ -73,6 +76,17 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         mViewHolder.prac.setText(myList.get(position).getLab()+myList.get(position).getLabt());
         mViewHolder.ab.setText(myList.get(position).getAbsent());
         mViewHolder.tc.setText(myList.get(position).getClasses());
+
+//        if (!dark){
+//            mViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFFF"));
+//            mViewHolder.sub.setTextColor(Color.parseColor("#141831"));
+//            mViewHolder.ta.setTextColor(Color.parseColor("#141831"));
+//            mViewHolder.lu.setTextColor(Color.parseColor("#141831"));
+//            mViewHolder.th.setTextColor(Color.parseColor("#141831"));
+//            mViewHolder.prac.setTextColor(Color.parseColor("#141831"));
+//            mViewHolder.ab.setTextColor(Color.parseColor("#141831"));
+//            mViewHolder.tc.setTextColor(Color.parseColor("#141831"));
+//        }
         return convertView;
     }
 
@@ -81,8 +95,9 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
 
         TextView sub,ta,lu,th,prac,ab,tc,tha,la;
         ImageView up,down;
-
+        CardView cardView;
         private MyViewHolder(View view) {
+            cardView = view.findViewById(R.id.card_view);
             sub =  view.findViewById(R.id.sub);
             lu=   view.findViewById(R.id.lu);
             th= view.findViewById(R.id.theory);

@@ -4,20 +4,20 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
+
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -31,19 +31,6 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.sql.SQLOutput;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,8 +41,21 @@ public class MainActivity extends AppCompatActivity {
     SharedPreferences userm,logout;
     SharedPreferences.Editor edit;
     LinearLayout ll;
+    private static final String PREFS_NAME = "prefs";
+    private static final String PREF_DARK_THEME = "dark_theme";
+    private Switch aSwitch;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        final boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
+
+        SharedPreferences theme = getSharedPreferences("theme",0);
+        boolean dark = theme.getBoolean("dark_theme", false);
+        Toast.makeText(this, String.valueOf(dark), Toast.LENGTH_SHORT).show();
+        if (useDarkTheme) {
+            if (dark)
+                setTheme(R.style.AppTheme_Dark_NoActionBar);
+        }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 ll=findViewById(R.id.ll);
@@ -67,6 +67,7 @@ ll.setOnTouchListener(new View.OnTouchListener() {
     return false;
     }
 });
+
         user = findViewById(R.id.user);
         pass = findViewById(R.id.pass);
         btn = findViewById(R.id.btn);
@@ -74,6 +75,12 @@ ll.setOnTouchListener(new View.OnTouchListener() {
                 Context.MODE_PRIVATE);
         logout= getSharedPreferences("sub",
                 Context.MODE_PRIVATE);
+
+        if (!dark){
+            user.setTextColor(Color.parseColor("#141831"));
+            pass.setTextColor(Color.parseColor("#141831"));
+        }
+
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -260,5 +267,15 @@ ll.setOnTouchListener(new View.OnTouchListener() {
                     haveConnectedMobile = true;
         }
         return haveConnectedWifi || haveConnectedMobile;
+    }
+    private void toggleTheme(boolean darkTheme) {
+        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
+        editor.putBoolean(PREF_DARK_THEME, darkTheme);
+        editor.apply();
+
+        Intent intent = getIntent();
+        finish();
+
+        startActivity(intent);
     }
 }
