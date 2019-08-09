@@ -9,6 +9,7 @@
      card_view:cardElevation="1dp"
      android:layout_marginBottom="4dp"
      card_view:cardUseCompatPadding="true"
+     card_view:cardBackgroundColor="@color/cardview_shadow_start_color"
      >
     <LinearLayout
         android:layout_width="match_parent"
@@ -35,9 +36,9 @@
              android:visibility="invisible"/>
         <TextView
             android:id="@+id/sub"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_weight="6"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:gravity="center"
             android:textStyle="bold"
             android:textSize="17dp"
@@ -61,6 +62,7 @@
             android:weightSum="2">
 
             <TextView
+                android:id="@+id/total"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
@@ -146,6 +148,7 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
                     <TextView
+                        android:id="@+id/updated"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.9"
@@ -170,6 +173,7 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
                     <TextView
+                        android:id="@+id/theory_t"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.9"
@@ -194,6 +198,7 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
                     <TextView
+                        android:id="@+id/practicle"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.9"
@@ -218,6 +223,7 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
                     <TextView
+                        android:id="@+id/classes"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.9"
@@ -242,6 +248,7 @@
                     android:orientation="horizontal"
                     android:weightSum="2">
                     <TextView
+                        android:id="@+id/absents"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="0.9"

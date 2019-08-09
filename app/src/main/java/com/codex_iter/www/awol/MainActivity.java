@@ -14,7 +14,6 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Switch;
@@ -31,8 +30,12 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 
 public class MainActivity extends AppCompatActivity {
     EditText user, pass;
@@ -51,13 +54,19 @@ public class MainActivity extends AppCompatActivity {
 
         SharedPreferences theme = getSharedPreferences("theme",0);
         boolean dark = theme.getBoolean("dark_theme", false);
-        Toast.makeText(this, String.valueOf(dark), Toast.LENGTH_SHORT).show();
         if (useDarkTheme) {
             if (dark)
                 setTheme(R.style.AppTheme_Dark_NoActionBar);
         }
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+//        SharedPreferences device_time = getSharedPreferences("Device_time", 0);
+//        SharedPreferences.Editor editor = device_time.edit();
+//
+//        Toast.makeText(this, String.valueOf(hour), Toast.LENGTH_SHORT).show();
+//        editor.putInt("Present_time", hour);
+//        editor.apply();
+
 ll=findViewById(R.id.ll);
 ll.setOnTouchListener(new View.OnTouchListener() {
     @Override
@@ -100,7 +109,7 @@ ll.setOnTouchListener(new View.OnTouchListener() {
                         edit.putString("user",u);
                         edit.putString(u+"pass",p);
                         edit.putString("pass",p);
-                        edit.commit();
+                        edit.apply();
                         edit=logout.edit();
                         edit.putBoolean("logout",false);
                         edit.commit();
@@ -120,14 +129,15 @@ ll.setOnTouchListener(new View.OnTouchListener() {
 
     }
 
-    private void showData(String u,String p) {
+
+    private void showData(String u, String p) {
         Toast.makeText(getApplicationContext(), "no network connection", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(MainActivity.this, home.class);
         if(userm.contains(u)) {
             if(p.equals(userm.getString(u+"pass", ""))){
                 edit=logout.edit();
                 edit.putBoolean("logout",false);
-                edit.commit();
+                edit.apply();
                 String s = userm.getString(u, "");
                 intent.putExtra("result", s);
                 Toast.makeText(getApplicationContext(), "showing offline value for this user", Toast.LENGTH_SHORT).show();
@@ -200,7 +210,7 @@ ll.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 protected Map<String, String> getParams()
                 {
-                    Map<String, String>  params = new HashMap<String, String>();
+                    Map<String, String>  params = new HashMap<>();
                     params.put("user", param[1]);
                     params.put("pass", param[2]);
 
@@ -267,15 +277,5 @@ ll.setOnTouchListener(new View.OnTouchListener() {
                     haveConnectedMobile = true;
         }
         return haveConnectedWifi || haveConnectedMobile;
-    }
-    private void toggleTheme(boolean darkTheme) {
-        SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-        editor.putBoolean(PREF_DARK_THEME, darkTheme);
-        editor.apply();
-
-        Intent intent = getIntent();
-        finish();
-
-        startActivity(intent);
     }
 }

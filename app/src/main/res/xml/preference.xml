@@ -3,14 +3,12 @@
 
     <PreferenceCategory android:title="Display">
         <SwitchPreference
-            android:defaultValue="true"
             android:key="pref_dark_mode"
             android:summary="Swtich Theme"
             android:title="Dark Mode" />
     </PreferenceCategory>
     <PreferenceCategory android:title="Mobile Notifications">
         <SwitchPreference
-            android:defaultValue="true"
             android:key="pref_notification"
             android:summary="Daily get notification at 7 AM."
             android:title="Enable Notification" />

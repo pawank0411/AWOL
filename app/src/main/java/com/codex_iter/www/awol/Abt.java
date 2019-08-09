@@ -22,7 +22,6 @@ public class Abt extends AppCompatActivity {
 
         SharedPreferences theme = getSharedPreferences("theme",0);
         boolean dark = theme.getBoolean("dark_theme", false);
-        Toast.makeText(this, String.valueOf(dark), Toast.LENGTH_SHORT).show();
         if (useDarkTheme) {
             if (dark)
             setTheme(R.style.AppTheme_Dark_NoActionBar);

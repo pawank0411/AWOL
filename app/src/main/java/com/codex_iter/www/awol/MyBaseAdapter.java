@@ -36,6 +36,8 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         MyViewHolder mViewHolder;
+        SharedPreferences theme = context.getSharedPreferences("theme",0);
+        boolean dark = theme.getBoolean("dark_theme", false);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.dummy, parent, false);
             mViewHolder = new MyViewHolder(convertView);
@@ -77,26 +79,37 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         mViewHolder.ab.setText(myList.get(position).getAbsent());
         mViewHolder.tc.setText(myList.get(position).getClasses());
 
-//        if (!dark){
-//            mViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFFF"));
-//            mViewHolder.sub.setTextColor(Color.parseColor("#141831"));
-//            mViewHolder.ta.setTextColor(Color.parseColor("#141831"));
-//            mViewHolder.lu.setTextColor(Color.parseColor("#141831"));
-//            mViewHolder.th.setTextColor(Color.parseColor("#141831"));
-//            mViewHolder.prac.setTextColor(Color.parseColor("#141831"));
-//            mViewHolder.ab.setTextColor(Color.parseColor("#141831"));
-//            mViewHolder.tc.setTextColor(Color.parseColor("#141831"));
-//        }
+        if (!dark){
+            mViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
+            mViewHolder.ta.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.lu.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.th.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.prac.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.ab.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.tc.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.total.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.updated.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.absents.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.pract.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.theory.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.classes.setTextColor(Color.parseColor("#141831"));
+        }
         return convertView;
     }
 
 
     private class MyViewHolder {
 
-        TextView sub,ta,lu,th,prac,ab,tc,tha,la;
+        TextView sub,ta,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents ;
         ImageView up,down;
         CardView cardView;
         private MyViewHolder(View view) {
+            total = view.findViewById(R.id.total);
+            theory = view.findViewById(R.id.theory_t);
+            updated = view.findViewById(R.id.updated);
+            pract = view.findViewById(R.id.practicle);
+            classes = view.findViewById(R.id.classes);
+            absents = view.findViewById(R.id.absents);
             cardView = view.findViewById(R.id.card_view);
             sub =  view.findViewById(R.id.sub);
             lu=   view.findViewById(R.id.lu);
