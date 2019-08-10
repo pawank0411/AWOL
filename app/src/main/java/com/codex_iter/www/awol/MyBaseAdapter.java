@@ -50,7 +50,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         animation.setDuration(200);
         convertView.startAnimation(animation);
         animation = null;
-         mViewHolder.sub.setText(myList.get(position).getSub());
+        mViewHolder.sub.setText(myList.get(position).getSub());
         mViewHolder.ta.setText(myList.get(position).getPercent()+"%");
 //        mViewHolder.tha.setText(myList.get(position).getThat());
 //        mViewHolder.la.setText(myList.get(position).getLabt());
@@ -67,7 +67,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
 //        if(myList.get(position).getStatus()==1)
 //            mViewHolder.at.setBackgroundResource(R.drawable.circp);
 //        else if(myList.get(position).getStatus()==2)
-//            mViewHolder.at.setBackgroundResource(R.drawable.circs);
+//            mViewHolder.at. setBackgroundResource(R.drawable.circs);
 //        else if(myList.get(position).getStatus()==3)
 //            mViewHolder.at.setBackgroundResource(R.drawable.circo);
 //        else
@@ -78,6 +78,8 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         mViewHolder.prac.setText(myList.get(position).getLab()+myList.get(position).getLabt());
         mViewHolder.ab.setText(myList.get(position).getAbsent());
         mViewHolder.tc.setText(myList.get(position).getClasses());
+        mViewHolder.bunk_text.setText(myList.get(position).getBunk_text_str());
+        //to be
 
         if (!dark){
             mViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -93,6 +95,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
             mViewHolder.pract.setTextColor(Color.parseColor("#141831"));
             mViewHolder.theory.setTextColor(Color.parseColor("#141831"));
             mViewHolder.classes.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.bunk_text.setTextColor(Color.parseColor("#141831"));
         }
         return convertView;
     }
@@ -100,7 +103,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
 
     private class MyViewHolder {
 
-        TextView sub,ta,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents ;
+        TextView sub,ta,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents,bunk_text ;
         ImageView up,down;
         CardView cardView;
         private MyViewHolder(View view) {
@@ -118,6 +121,8 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
             ab= view.findViewById(R.id.ab);
             tc=view.findViewById(R.id.tc);
             ta=view.findViewById(R.id.ta);
+            bunk_text=view.findViewById(R.id.bunk_text);
+
 //            tha=view.findViewById(R.id.tha);
 //            la=view.findViewById(R.id.la);
             up=view.findViewById(R.id.up);

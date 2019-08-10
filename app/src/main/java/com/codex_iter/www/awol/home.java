@@ -83,6 +83,7 @@ public class home extends AppCompatActivity {
                 ld[i].setLab(jObj.getString("Patt"));
                 ld[i].setUpd(ck);
                 ld[i].setPercent(jObj.getString("TotalAttandence"));
+                ld[i].setBunk();
                 avgat += Double.parseDouble(jObj.getString("TotalAttandence").trim());
                 avgab += Integer.parseInt(ld[i].getAbsent());
             }
