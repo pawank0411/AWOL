@@ -36,7 +36,7 @@
              android:visibility="invisible"/>
         <TextView
             android:id="@+id/sub"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_weight="6"
             android:layout_height="wrap_content"
             android:gravity="center"
@@ -265,6 +265,21 @@
                         android:textColor="@color/colorAccent"
                         android:textStyle="bold"
                         android:gravity="center_vertical"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorAccent"
+                        android:textStyle="bold"
+                        android:layout_marginTop="2dp"
+                        android:id="@+id/bunk_text"
+                        android:text="Don't Bunk Anymore"
+                        android:textSize="16sp"
+                        android:textAlignment="center"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
