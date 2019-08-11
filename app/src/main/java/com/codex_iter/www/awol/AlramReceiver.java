@@ -18,6 +18,7 @@ import androidx.core.app.NotificationCompat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 
 import static android.content.ContentValues.TAG;
@@ -36,10 +37,9 @@ public class AlramReceiver extends BroadcastReceiver {
         TimeZone tz = TimeZone.getTimeZone("GMT+05:30");
         localTime.setTimeZone(tz);
         Date date = localTime.getTime();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH", Locale.US);
         int present_time =   Integer.parseInt(simpleDateFormat.format(date));
-
-        SharedPreferences set_time = context.getSharedPreferences("Set_time", 0);
+         SharedPreferences set_time = context.getSharedPreferences("Set_time", 0);
         int set_t = set_time.getInt("Set_Time", 0);
         if (present_time > set_t){
             Toast.makeText(context, "Alram set for tommorrow!", Toast.LENGTH_SHORT).show();
@@ -48,8 +48,6 @@ public class AlramReceiver extends BroadcastReceiver {
 
             Intent intent1 = new Intent(context, MainActivity.class);
             intent1.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-            PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 100, intent1, PendingIntent.FLAG_UPDATE_CURRENT);
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 CharSequence name = "Notifications";// The user-visible name of the channel.
@@ -77,7 +75,7 @@ public class AlramReceiver extends BroadcastReceiver {
                 Log.v(TAG, "Notification sent");
                 final SharedPreferences sharedPreferences = context.getSharedPreferences("Notification_date", 0);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
-                SimpleDateFormat simpleDat = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat simpleDat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                 String date_fired = simpleDat.format(date);
                 editor.putString("Date", date_fired);
                 editor.apply();
@@ -103,7 +101,7 @@ public class AlramReceiver extends BroadcastReceiver {
                 Log.v(TAG, "Notification sent");
                 final SharedPreferences sharedPreferences = context.getSharedPreferences("Notification_date", 0);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
-                SimpleDateFormat simpleDat = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat simpleDat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                 String date_fired = simpleDat.format(date);
                 editor.putString("Date", date_fired);
                 editor.apply();
@@ -127,7 +125,8 @@ public class AlramReceiver extends BroadcastReceiver {
                 notificationManager.notify(notificationId, notificationBuilder.build());
                 final SharedPreferences sharedPreferences = context.getSharedPreferences("Notification_date", 0);
                 final SharedPreferences.Editor editor = sharedPreferences.edit();
-                SimpleDateFormat simpleDat = new SimpleDateFormat("dd-MM-yyyy");
+                SimpleDateFormat simpleDat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
+
                 String date_fired = simpleDat.format(date);
                 editor.putString("Date", date_fired);
                 editor.apply();

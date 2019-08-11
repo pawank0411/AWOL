@@ -1,4 +1,5 @@
 package com.codex_iter.www.awol;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.cardview.widget.CardView;
@@ -33,6 +35,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         MyViewHolder mViewHolder;
@@ -50,7 +53,23 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         animation.setDuration(200);
         convertView.startAnimation(animation);
         animation = null;
-         mViewHolder.sub.setText(myList.get(position).getSub());
+        mViewHolder.sub.setText(myList.get(position).getSub());
+        String p = myList.get(position).getPercent();
+        double percent = Double.valueOf(p);
+
+        if (percent > 75){
+            mViewHolder.ta.setBackgroundColor(Color.parseColor("#2aac4b"));
+        } else if (percent < 65){
+            if (percent > 55){
+                mViewHolder.ta.setBackgroundColor(Color.parseColor("#FFF3F025"));
+            }
+        } else if (percent > 65) {
+            if (percent < 75) {
+                mViewHolder.ta.setBackgroundColor(Color.parseColor("#FFF3F025"));
+            }
+        } else {
+            mViewHolder.ta.setBackgroundColor(Color.parseColor("#F5FC0101"));
+        }
         mViewHolder.ta.setText(myList.get(position).getPercent()+"%");
 //        mViewHolder.tha.setText(myList.get(position).getThat());
 //        mViewHolder.la.setText(myList.get(position).getLabt());
@@ -67,7 +86,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
 //        if(myList.get(position).getStatus()==1)
 //            mViewHolder.at.setBackgroundResource(R.drawable.circp);
 //        else if(myList.get(position).getStatus()==2)
-//            mViewHolder.at.setBackgroundResource(R.drawable.circs);
+//            mViewHolder.at. setBackgroundResource(R.drawable.circs);
 //        else if(myList.get(position).getStatus()==3)
 //            mViewHolder.at.setBackgroundResource(R.drawable.circo);
 //        else
@@ -78,6 +97,8 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         mViewHolder.prac.setText(myList.get(position).getLab()+myList.get(position).getLabt());
         mViewHolder.ab.setText(myList.get(position).getAbsent());
         mViewHolder.tc.setText(myList.get(position).getClasses());
+        mViewHolder.bunk_text.setText(myList.get(position).getBunk_text_str());
+        //to be
 
         if (!dark){
             mViewHolder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -87,12 +108,13 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
             mViewHolder.prac.setTextColor(Color.parseColor("#141831"));
             mViewHolder.ab.setTextColor(Color.parseColor("#141831"));
             mViewHolder.tc.setTextColor(Color.parseColor("#141831"));
-            mViewHolder.total.setTextColor(Color.parseColor("#141831"));
+           // mViewHolder.total.setTextColor(Color.parseColor("#141831"));
             mViewHolder.updated.setTextColor(Color.parseColor("#141831"));
             mViewHolder.absents.setTextColor(Color.parseColor("#141831"));
             mViewHolder.pract.setTextColor(Color.parseColor("#141831"));
             mViewHolder.theory.setTextColor(Color.parseColor("#141831"));
             mViewHolder.classes.setTextColor(Color.parseColor("#141831"));
+            mViewHolder.bunk_text.setTextColor(Color.parseColor("#141831"));
         }
         return convertView;
     }
@@ -100,11 +122,11 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
 
     private class MyViewHolder {
 
-        TextView sub,ta,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents ;
+        TextView sub,ta,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents,bunk_text ;
         ImageView up,down;
         CardView cardView;
         private MyViewHolder(View view) {
-            total = view.findViewById(R.id.total);
+          //  total = view.findViewById(R.id.total);
             theory = view.findViewById(R.id.theory_t);
             updated = view.findViewById(R.id.updated);
             pract = view.findViewById(R.id.practicle);
@@ -118,6 +140,8 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
             ab= view.findViewById(R.id.ab);
             tc=view.findViewById(R.id.tc);
             ta=view.findViewById(R.id.ta);
+            bunk_text=view.findViewById(R.id.bunk_text);
+
 //            tha=view.findViewById(R.id.tha);
 //            la=view.findViewById(R.id.la);
             up=view.findViewById(R.id.up);

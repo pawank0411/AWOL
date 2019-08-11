@@ -6,85 +6,53 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-
+    android:theme="@style/AppTheme.Dark.NoActionBar"
     android:orientation="vertical"
     android:paddingVertical="20dp"
     android:paddingHorizontal="5dp"
     android:gravity="center_horizontal"
-    tools:context="com.codex_iter.www.awol.MainActivity">
+    tools:context="com.codex_iter.www.awol.MainActivity"
+    tools:targetApi="o">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="A"
-        android:textSize="90dp"
-        android:fontFamily="cursive"
-        android:gravity="center"
-        android:layout_marginTop="20dp"
-        android:textStyle="bold"
-        android:layout_gravity="center_horizontal"
-        android:textColor="@color/colorPrimaryDark"
-        android:background="@drawable/circ"/>
-    <TextView
-        android:id="@+id/ver"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="Ver. 4.0"
-        android:textColor="@color/colorAccent"
-        android:layout_marginTop="7dp"
-        android:textSize="18dp"
-        />
+    <ImageView
+        android:id="@+id/logo"
+        android:layout_width="234dp"
+        android:layout_height="224dp"
+        android:contentDescription="@string/todo" />
     <TextView
         android:id="@+id/dis"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="DISCLAIMER"
+        android:text="@string/disclaimer"
         android:textColor="@color/colorAccent"
         android:layout_marginTop="7dp"
-        android:textSize="18dp"
+        android:textSize="18sp"
         />
+
     <TextView
         android:id="@+id/para"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity=""
+        android:layout_marginTop="9dp"
+        android:gravity="center"
+        android:paddingHorizontal="15dp"
         android:text="@string/abtAPP"
         android:textColor="#aaaaaa"
-        android:paddingHorizontal="15dp"
-        android:layout_marginTop="9dp"
-        android:textSize="13dp"
-        />
-    <TextView
-        android:id="@+id/abt_me"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:text="ABOUT ME"
-        android:textColor="@color/colorAccent"
-        android:layout_marginTop="10dp"
-        android:textSize="18dp"
-        />
-    <TextView
-        android:id="@+id/hey"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:text="@string/abtME"
-        android:textColor="#aaaaaa"
-        android:paddingHorizontal="15dp"
-        android:layout_marginTop="7dp"
-        android:textSize="13dp"
-        />
+        android:textSize="13sp"
+        tools:targetApi="o" />
+
+
+
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="40dp"
         android:weightSum="4"
         android:gravity="center"
         android:layout_marginHorizontal="6dp"
         android:layout_marginTop="15dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        tools:targetApi="o">
         <ImageView
             android:id="@+id/fb"
             android:layout_width="0dp"
@@ -92,15 +60,17 @@
             android:layout_weight="1"
             android:layout_marginHorizontal="4dp"
             android:src="@drawable/fb"
-            />
+            tools:targetApi="o"
+            android:contentDescription="@string/todo" />
         <ImageView
             android:id="@+id/git"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:src="@drawable/git"
+            android:src="@drawable/insta"
             android:layout_marginHorizontal="4dp"
-            />
+            tools:targetApi="o"
+            android:contentDescription="@string/todo" />
         <ImageView
             android:id="@+id/gmail"
             android:layout_width="0dp"
@@ -108,19 +78,66 @@
             android:layout_weight="1"
             android:src="@drawable/gmail"
             android:layout_marginHorizontal="4dp"
-            />
+            tools:targetApi="o"
+            android:contentDescription="@string/todo" />
 </LinearLayout>
     <TextView
         android:id="@+id/cdx"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:text="MADE WITH  💚  AS A PROJECT FOR CODEX"
+        android:text="@string/made_with_as_a_project_for_codex"
         android:textColor="@color/colorPrimary"
         android:layout_marginTop="15dp"
         android:fontFamily="sans-serif-condensed"
         android:layout_marginHorizontal="25dp"
         android:background="@drawable/edit"
-        android:textSize="16dp"
-        />
+        android:textSize="16sp"
+        tools:targetApi="o" />
+
+    <TextView
+        android:id="@+id/dev"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingHorizontal="15dp"
+        android:textSize="19sp"
+        android:textStyle="bold"
+        android:textAllCaps="true"
+        android:textColor="#aaaaaa"
+        android:layout_margin="10sp"
+        android:text="@string/developers"
+        tools:targetApi="o" />
+
+    <TextView
+        android:id="@+id/mohit"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textColor="#aaaaaa"
+        android:textAllCaps="true"
+        android:layout_height="wrap_content"
+        android:text="@string/mohit_agarwal" />
+
+    <TextView
+        android:id="@+id/pawan"
+        android:textColor="#aaaaaa"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textSize="15sp"
+        android:textAllCaps="true"
+        android:layout_height="wrap_content"
+        android:text="@string/pawan_gorai" />
+
+    <TextView
+        android:id="@+id/nehal"
+        android:layout_width="match_parent"
+        android:gravity="center"
+        android:textColor="#aaaaaa"
+        android:textSize="15sp"
+        android:textAllCaps="true"
+        android:layout_height="wrap_content"
+        android:text="@string/nehal_kumar_singh" />
+
+
 </LinearLayout>

@@ -25,8 +25,7 @@
     android:textColor="#000"
     android:textSize="25dp"
     android:padding="5dp"
-    android:textStyle="bold"
-    android:lineSpacingExtra="15dp"/>
+    android:textStyle="bold"/>
 </LinearLayout>
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"

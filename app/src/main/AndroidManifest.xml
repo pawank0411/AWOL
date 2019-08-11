@@ -32,7 +32,8 @@
         <activity android:name=".Bunk"
             android:configChanges="uiMode"/>
         <activity android:name=".Abt"
-            android:configChanges="uiMode"></activity>
+            android:configChanges="uiMode"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
         <receiver android:name=".AlramReceiver"
             android:enabled="true"
             android:exported="false"/>

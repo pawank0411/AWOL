@@ -7,7 +7,7 @@ import java.util.Scanner;
  * */
 public class ListData {
 
-    String sub,code,upd,theory,lab,percent,that="",labt="",old="";
+    String sub,code,upd,theory,lab,percent,that="",labt="",old="",bunk_text_str="Don't Bunk Anymore";
     double thT,thp,lat,lap,tc,tha,la;
     int status;
      static ListData[] ld;
@@ -112,6 +112,10 @@ public class ListData {
         }
     }
 
+    public String getBunk_text_str() {
+        return bunk_text_str;
+    }
+
 
     public String getAbsent()
     {   int i=(int)Math.floor(lat+thT-thp-lap);
@@ -125,6 +129,42 @@ public class ListData {
     public void setPercent(String percent) {
         this.percent = String.format("%.1f",new Scanner(percent).nextDouble());
     }
+    public void setBunk()
+    {
+        double percent_class=Double.parseDouble(getPercent());
+        double total_class = Double.parseDouble(getClasses());
+        double absent = Double.parseDouble(getAbsent());
+        double present = total_class - absent;
+        int i;
+        if(percent_class>=75) {
+            //to be continued...
+            for (i = 0; i != -99; i++) {
+                double p = (present / (total_class + i)) * 100;
+                if (p < 75) break;
+            }
+            i--;
+            if (i != 1) {
+                this.bunk_text_str = "BUNK " + i + " classes for 75%";
+            }else {
+                this.bunk_text_str = "BUNK " + i + " class for 75%";
+            }
+        }
+        else
+        {
+            for (i = 0; i != -99; i++) {
+                double p = ((present + i) / (total_class + i) * 100);
+                if (p > 75) break;
+            }
+            i--;
+            if (i != 1) {
+                this.bunk_text_str = "Attend " + i + " classes for 75%";
+            } else {
+                this.bunk_text_str = "Attend " + i + " class for 75%";
+            }
+        }
+    }
+
+
 }
 
 
