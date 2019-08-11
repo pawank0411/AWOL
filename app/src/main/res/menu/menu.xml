@@ -15,13 +15,16 @@
     <item
         android:id="@+id/abt"
         android:icon="@drawable/ic_local"
-        android:title="About Developer"
-
-        />
+        android:title="About Us" />
     <item
         android:id="@+id/cd"
         android:icon="@drawable/ic_code"
         android:title="Open Source Geek?" />
+    <item
+        android:title="Privacy Policy"
+        android:icon="@drawable/lock"
+        android:id="@+id/policy"/>
+
     <item
         android:id="@+id/lgout"
         android:icon="@drawable/ic_home"

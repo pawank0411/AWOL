@@ -1,4 +1,5 @@
 package com.codex_iter.www.awol;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -12,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import androidx.cardview.widget.CardView;
@@ -33,6 +35,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         MyViewHolder mViewHolder;
@@ -51,6 +54,22 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         convertView.startAnimation(animation);
         animation = null;
         mViewHolder.sub.setText(myList.get(position).getSub());
+        String p = myList.get(position).getPercent();
+        double percent = Double.valueOf(p);
+
+        if (percent > 75){
+            mViewHolder.ta.setBackgroundColor(Color.parseColor("#2aac4b"));
+        } else if (percent < 65){
+            if (percent > 55){
+                mViewHolder.ta.setBackgroundColor(Color.parseColor("#FFF3F025"));
+            }
+        } else if (percent > 65) {
+            if (percent < 75) {
+                mViewHolder.ta.setBackgroundColor(Color.parseColor("#FFF3F025"));
+            }
+        } else {
+            mViewHolder.ta.setBackgroundColor(Color.parseColor("#F5FC0101"));
+        }
         mViewHolder.ta.setText(myList.get(position).getPercent()+"%");
 //        mViewHolder.tha.setText(myList.get(position).getThat());
 //        mViewHolder.la.setText(myList.get(position).getLabt());
@@ -89,7 +108,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
             mViewHolder.prac.setTextColor(Color.parseColor("#141831"));
             mViewHolder.ab.setTextColor(Color.parseColor("#141831"));
             mViewHolder.tc.setTextColor(Color.parseColor("#141831"));
-            mViewHolder.total.setTextColor(Color.parseColor("#141831"));
+           // mViewHolder.total.setTextColor(Color.parseColor("#141831"));
             mViewHolder.updated.setTextColor(Color.parseColor("#141831"));
             mViewHolder.absents.setTextColor(Color.parseColor("#141831"));
             mViewHolder.pract.setTextColor(Color.parseColor("#141831"));
@@ -107,7 +126,7 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         ImageView up,down;
         CardView cardView;
         private MyViewHolder(View view) {
-            total = view.findViewById(R.id.total);
+          //  total = view.findViewById(R.id.total);
             theory = view.findViewById(R.id.theory_t);
             updated = view.findViewById(R.id.updated);
             pract = view.findViewById(R.id.practicle);

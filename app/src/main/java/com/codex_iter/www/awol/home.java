@@ -11,7 +11,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -43,12 +42,13 @@ public class home extends AppCompatActivity {
     DrawerLayout dl;
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         SharedPreferences preferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         final boolean useDarkTheme = preferences.getBoolean(PREF_DARK_THEME, false);
 
-        SharedPreferences theme = getSharedPreferences("theme",0);
+        SharedPreferences theme = getSharedPreferences("theme", 0);
         boolean dark = theme.getBoolean("dark_theme", false);
         if (useDarkTheme) {
             if (dark)
@@ -151,14 +151,16 @@ public class home extends AppCompatActivity {
                                     Intent intent1 = new Intent(getApplicationContext(), SettingsActivity.class);
                                     startActivity(intent1);
                                     break;
+                                case R.id.policy:
+                                    Uri uri = Uri.parse("https://awol.flycricket.io/privacy.html");
+                                    Intent intent2 = new Intent(Intent.ACTION_VIEW, uri);
+                                    startActivity(intent2);
+                                    break;
                             }
-
                             return true;
                         }
                     });
         }
-
-
     }
 
     private String Updated(JSONObject jObj, SharedPreferences sub, String code, int i) throws JSONException {

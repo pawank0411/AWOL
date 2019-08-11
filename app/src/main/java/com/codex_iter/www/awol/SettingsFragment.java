@@ -4,15 +4,17 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.PreferenceCategory;
 import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.widget.Toast;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 import static android.content.Context.ALARM_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
@@ -21,7 +23,6 @@ public class SettingsFragment extends PreferenceFragment {
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
     private boolean flag = true;
-
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         SharedPreferences preferences = getActivity().getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -32,6 +33,7 @@ public class SettingsFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preference);
         final SwitchPreference darkmode = (SwitchPreference) findPreference("pref_dark_mode");
         final SwitchPreference notifications = (SwitchPreference) findPreference("pref_notification");
+
         SharedPreferences device_time = getActivity().getSharedPreferences("Set_time", 0);
         final SharedPreferences.Editor set_time = device_time.edit();
 
@@ -43,11 +45,7 @@ public class SettingsFragment extends PreferenceFragment {
 
                     toggleTheme(checked);
                     Intent intent = new Intent(getActivity(), MainActivity.class);
-                    if (android.os.Build.VERSION.SDK_INT >= 11) {
-                        getActivity().recreate();
-                    } else {
-                        getActivity().finish();
-                    }
+                    getActivity().recreate();
                     startActivity(intent);
                     return true;
                 }
@@ -70,7 +68,7 @@ public class SettingsFragment extends PreferenceFragment {
                             calendar.set(Calendar.HOUR_OF_DAY, 7);
                             calendar.set(Calendar.MINUTE, 0);
                             calendar.set(Calendar.SECOND, 0);
-                            SimpleDateFormat present_date = new SimpleDateFormat("dd-MM-yyyy");
+                            SimpleDateFormat present_date = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                             String present_d = present_date.format(alram_time);
 
                             String fired_date = sharedPreferences.getString("Date", null);
@@ -82,7 +80,7 @@ public class SettingsFragment extends PreferenceFragment {
                                 AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
                                 alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
                                 Date date = new Date();
-                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy",Locale.US);
                                 String date_fired = simpleDateFormat.format(date);
                                 editor.putString("Date", date_fired);
                                 editor.apply();
@@ -99,19 +97,19 @@ public class SettingsFragment extends PreferenceFragment {
                             set_time.apply();
 
                             Date date = new Date();
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy", Locale.US);
                             String present_d = simpleDateFormat.format(date);
 
                             String fired_date = sharedPreferences.getString("Date", null);
                             if (fired_date == null) {
-                                    Toast.makeText(getActivity(), "First fire", Toast.LENGTH_SHORT).show();
-                                    Intent intent = new Intent(getActivity(), AlramReceiver.class);
-                                    PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                                    AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
-                                    alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-                                    String date_fired = simpleDateFormat.format(date);
-                                    editor.putString("Date", date_fired);
-                                    editor.apply();
+                                Toast.makeText(getActivity(), "First fire", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(getActivity(), AlramReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(), 100, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                AlarmManager alarmManager = (AlarmManager) getActivity().getSystemService(ALARM_SERVICE);
+                                alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+                                String date_fired = simpleDateFormat.format(date);
+                                editor.putString("Date", date_fired);
+                                editor.apply();
                             } else if (!fired_date.equals(present_d)) {
                                 Toast.makeText(getActivity(), "Next Day", Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(getActivity(), AlramReceiver.class);
@@ -154,4 +152,5 @@ public class SettingsFragment extends PreferenceFragment {
 
         startActivity(intent);
     }
+
 }

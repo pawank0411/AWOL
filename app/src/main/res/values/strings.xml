@@ -9,5 +9,22 @@
     ATTENDANCE AND BUNK SAFELY.THE ATTENDANCE SHOWN IS COMPLETELY MANAGED BY COLLEGE.THE DEVELOPER IS NOT RESPONSIBLE FOR
         INACCURATE ATTENDANCE OR DELAY IN ATTENDANCE UPDATE.</string>
     <string name="abtME">HEY FELLAS! THIS IS MOHIT AGARWAL.\nHOPE YOU ENJOY THE APP.\nREACH ME FOR A COFFEE AT</string>
+    <string name="don_t_bunk_anymore">DON\'T BUNK ANYMORE</string>
+    <string name="absents">Absents :</string>
+    <string name="classes">Classes :</string>
+    <string name="practical">Practical :</string>
+    <string name="theory">Theory :</string>
+    <string name="_22_12_2017">22/12/2017</string>
+    <string name="updated_on">Updated On:</string>
+    <string name="_95_5">95.5%</string>
+    <string name="number_theory">Number Theory</string>
+    <string name="not_applicable">not_applicable</string>
+    <string name="developers">Developers</string>
+    <string name="made_with_as_a_project_for_codex">MADE WITH 💚 AS A PROJECT FOR CODEX</string>
+    <string name="disclaimer">DISCLAIMER</string>
+    <string name="todo">TODO</string>
+    <string name="mohit_agarwal">Mohit Agarwal</string>
+    <string name="pawan_gorai">Pawan Gorai</string>
+    <string name="nehal_kumar_singh">Nehal Kumar Singh</string>
 </resources>
 
