@@ -142,8 +142,11 @@ public class Bunk extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 String s = taredt.getText().toString().trim();
-                if (s.equals(""))
-                    Toast.makeText(getApplicationContext(), "enter some value", Toast.LENGTH_SHORT).show();
+                if (s.equals("0")){
+                    Toast.makeText(Bunk.this, "Enter Valid Value", Toast.LENGTH_SHORT).show();
+                }
+                else if (s.equals(""))
+                    Toast.makeText(getApplicationContext(), "Enter Some Value", Toast.LENGTH_SHORT).show();
                 else if(s.equals("100")&&absent>0)
                     Toast.makeText(getApplicationContext(), "Not Possible!!", Toast.LENGTH_SHORT).show();
                 else {
@@ -294,6 +297,8 @@ public class Bunk extends AppCompatActivity{
            public boolean onTouch(View v, MotionEvent event) {
                taredt.setText("");
                atndedt.setText("");
+               result.setText("");
+               left.setText("");
                return false;
            }
        });
@@ -303,6 +308,8 @@ public class Bunk extends AppCompatActivity{
             public boolean onTouch(View v, MotionEvent event) {
                 bnkedt.setText("");
                 taredt.setText("");
+                result.setText("");
+                left.setText("");
                 return false;
             }
         });
@@ -312,6 +319,8 @@ public class Bunk extends AppCompatActivity{
             public boolean onTouch(View v, MotionEvent event) {
                 bnkedt.setText("");
                 atndedt.setText("");
+                result.setText("");
+                left.setText("");
                 return false;
             }
         });
