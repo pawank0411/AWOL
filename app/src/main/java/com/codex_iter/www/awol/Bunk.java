@@ -1,4 +1,5 @@
 package com.codex_iter.www.awol;
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -18,6 +19,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Scanner;
 
 public class Bunk extends AppCompatActivity{
@@ -28,9 +31,11 @@ public class Bunk extends AppCompatActivity{
     Button target,bunk,attend;
     double absent,total,percent,present;
     ListData[] ld;
+    @SuppressWarnings("FieldCanBeLocal")
     private TextView target_at, bunk_at, attend_at;
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -50,7 +55,7 @@ public class Bunk extends AppCompatActivity{
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+                inputManager.hideSoftInputFromWindow(Objects.requireNonNull(getCurrentFocus()).getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                 return false;
             }
         });
@@ -65,13 +70,14 @@ public class Bunk extends AppCompatActivity{
         }
 
         this.ld=ListData.ld;
-        String subn[]=new String[ld.length];
+        String[] subn = new String[ld.length];
         for(int i=0;i<ld.length;i++)
             subn[i]=ld[i].getSub();
         sub=findViewById(R.id.sub);
-        ArrayAdapter a=new ArrayAdapter(this,R.layout.drop_down,subn);
+        ArrayAdapter a= new ArrayAdapter<>(this, R.layout.drop_down, subn);
         sub.setAdapter(a);
         sub.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
+            @SuppressLint("SetTextI18n")
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 total=Double.parseDouble(ld[position].getClasses());
@@ -96,6 +102,7 @@ public class Bunk extends AppCompatActivity{
                 left.setText("");
             }
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
                 total=Double.parseDouble(ld[0].getClasses());
@@ -131,11 +138,15 @@ public class Bunk extends AppCompatActivity{
         left=findViewById(R.id.left);
 
         target.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 String s = taredt.getText().toString().trim();
-                if (s.equals(""))
-                    Toast.makeText(getApplicationContext(), "enter some value", Toast.LENGTH_SHORT).show();
+                if (s.equals("0")){
+                    Toast.makeText(Bunk.this, "Enter Valid Value", Toast.LENGTH_SHORT).show();
+                }
+                else if (s.equals(""))
+                    Toast.makeText(getApplicationContext(), "Enter Some Value", Toast.LENGTH_SHORT).show();
                 else if(s.equals("100")&&absent>0)
                     Toast.makeText(getApplicationContext(), "Not Possible!!", Toast.LENGTH_SHORT).show();
                 else {
@@ -205,6 +216,7 @@ public class Bunk extends AppCompatActivity{
 
         attend.setOnClickListener(new View.OnClickListener() {
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 String s= atndedt.getText().toString().trim();
@@ -217,19 +229,19 @@ public class Bunk extends AppCompatActivity{
                     if (getCurrentFocus() != null)
                         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     double p = ((present + c) / (total + c)) * 100;
-                    result.setText("You attendance will be " + String.format("%.2f", p));
-                    int attend = c,i;
+                    result.setText("You attendance will be " + String.format(Locale.US, "%.2f", p));
+                    int i;
                     double pr;
                     if (75 < p) {
 
                         for (i = 0; i != -99; i++) {
-                            pr = ((present+attend )/ (total+attend + i)) * 100;
+                            pr = ((present+ c)/ (total+ c + i)) * 100;
                             if (pr < 75) break;
                         }
                         left.setText("Bunk " + (i-1) + " classes afterwards for 75% ");
                     } else if (75 > p) {
                         for (i = 0; i != -99; i++) {
-                            pr = ((present+attend + i) / (total+attend+ i) * 100);
+                            pr = ((present+ c + i) / (total+ c + i) * 100);
                             if (pr > 75) break;
                         }
                         left.setText("Attend " + (i-1) + " more classes for 75%");
@@ -242,6 +254,7 @@ public class Bunk extends AppCompatActivity{
 
         bunk.setOnClickListener(new View.OnClickListener() {
 
+            @SuppressLint("SetTextI18n")
             @Override
             public void onClick(View v) {
                 String s= bnkedt.getText().toString().trim();
@@ -254,20 +267,20 @@ public class Bunk extends AppCompatActivity{
                         inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
                     int c = new Scanner(bnkedt.getText().toString().trim()).nextInt();
                     double p = ((present) / (total + c)) * 100;
-                    result.setText("You attendance will be " + String.format("%.2f", p));
-                    int bunk=c,i;
+                    result.setText("You attendance will be " + String.format(Locale.US, "%.2f", p));
+                    int i;
                     double pr;
 
                     if (75 < p) {
 
                         for (i = 0; i != -99; i++) {
-                            pr = (present / (total+bunk + i)) * 100;
+                            pr = (present / (total+ c + i)) * 100;
                             if (pr < 75) break;
                         }
                         left.setText("Bunk " + (i-1) + " more classes for 75% ");
                     } else if (75 > p) {
                         for (i = 0; i != -99; i++) {
-                            pr = ((present + i) / (total+bunk + i) * 100);
+                            pr = ((present + i) / (total+ c + i) * 100);
                             if (pr > 75) break;
                         }
                         left.setText("Attend " + (i-1) + " classes after bunk for 75%");
@@ -284,6 +297,8 @@ public class Bunk extends AppCompatActivity{
            public boolean onTouch(View v, MotionEvent event) {
                taredt.setText("");
                atndedt.setText("");
+               result.setText("");
+               left.setText("");
                return false;
            }
        });
@@ -293,6 +308,8 @@ public class Bunk extends AppCompatActivity{
             public boolean onTouch(View v, MotionEvent event) {
                 bnkedt.setText("");
                 taredt.setText("");
+                result.setText("");
+                left.setText("");
                 return false;
             }
         });
@@ -302,6 +319,8 @@ public class Bunk extends AppCompatActivity{
             public boolean onTouch(View v, MotionEvent event) {
                 bnkedt.setText("");
                 atndedt.setText("");
+                result.setText("");
+                left.setText("");
                 return false;
             }
         });

@@ -2,7 +2,6 @@
 <LinearLayout
     android:id="@+id/ll"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -24,7 +23,8 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginHorizontal="10dp"
-        android:background="#000" />
+        android:background="#000"
+        tools:ignore="UnusedAttribute" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -40,9 +40,9 @@
             android:layout_height="match_parent"
             android:layout_weight="2.8"
             android:gravity="center"
-            android:text="Your Target Attendance:"
+            android:text="@string/your_target_attendance"
             android:textColor="@color/colorAccent"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/taredt"
@@ -64,16 +64,16 @@
         android:layout_marginTop="10dp"
         android:layout_weight="0.75"
         android:background="@drawable/btnr"
-        android:text="Result" />
+        android:text="@string/result" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="OR"
+        android:text="@string/or"
         android:textColor="#999999"
-        android:textSize="15dp" />
+        android:textSize="15sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -88,9 +88,9 @@
             android:layout_height="match_parent"
             android:layout_weight="2.8"
             android:gravity="center"
-            android:text="Classes you wanna bunk:"
+            android:text="@string/classes_you_wanna_bunk"
             android:textColor="@color/colorAccent"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/bnkedt"
@@ -101,7 +101,8 @@
             android:text=""
             android:maxLines="1"
             android:inputType="number"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            tools:ignore="Autofill,LabelFor" />
     </LinearLayout>
 
     <Button
@@ -112,15 +113,15 @@
         android:layout_marginTop="10dp"
         android:layout_weight="0.75"
         android:background="@drawable/btnr"
-        android:text="Bunk" />
+        android:text="@string/bunk" />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
         android:gravity="center"
-        android:text="OR"
-        android:textSize="15dp"
+        android:text="@string/or"
+        android:textSize="15sp"
         android:textColor="#999999"/>
 
     <LinearLayout
@@ -136,9 +137,9 @@
             android:layout_height="match_parent"
             android:layout_weight="2.8"
             android:gravity="center"
-            android:text="Classes you gonna attend:"
+            android:text="@string/classes_you_gonna_attend"
             android:textColor="@color/colorAccent"
-            android:textSize="16dp" />
+            android:textSize="16sp" />
 
         <EditText
             android:id="@+id/atndedt"
@@ -149,7 +150,8 @@
             android:text=""
             android:maxLines="1"
             android:inputType="number"
-            android:textColor="@color/colorPrimary" />
+            android:textColor="@color/colorPrimary"
+            tools:ignore="Autofill,LabelFor" />
     </LinearLayout>
 
     <Button
@@ -160,14 +162,15 @@
         android:layout_marginTop="10dp"
         android:layout_weight="0.75"
         android:background="@drawable/btnr"
-        android:text="Attend" />
+        android:text="@string/attend" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_marginHorizontal="10dp"
         android:layout_marginTop="10dp"
-        android:background="#000" />
+        android:background="#000"
+        tools:ignore="UnusedAttribute" />
 
     <TextView
         android:id="@+id/result"
@@ -178,7 +181,7 @@
         android:gravity="center"
         android:text=""
         android:textColor="@color/colorPrimary"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
     <TextView
         android:id="@+id/left"
         android:layout_width="match_parent"
@@ -188,7 +191,7 @@
         android:gravity="center"
         android:text=""
         android:textColor="@color/colorPrimary"
-        android:textSize="18dp" />
+        android:textSize="18sp" />
 
 
 </LinearLayout>

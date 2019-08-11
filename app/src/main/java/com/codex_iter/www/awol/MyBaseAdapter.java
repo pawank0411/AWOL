@@ -1,7 +1,6 @@
 package com.codex_iter.www.awol;
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -10,21 +9,18 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-
+import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class MyBaseAdapter extends ArrayAdapter<ListData> {
-    private ArrayList<ListData> myList = new ArrayList<ListData>();
-    LayoutInflater inflater;
-    Context context;
+    private ArrayList<ListData> myList;
+    private LayoutInflater inflater;
+    private Context context;
 
 
     public MyBaseAdapter(Context context, ArrayList<ListData> myList) {
@@ -35,9 +31,10 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
     }
 
 
+    @NonNull
     @SuppressLint("SetTextI18n")
     @Override
-    public View getView(final int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, @NonNull ViewGroup parent) {
         MyViewHolder mViewHolder;
         SharedPreferences theme = context.getSharedPreferences("theme",0);
         boolean dark = theme.getBoolean("dark_theme", false);
@@ -48,11 +45,10 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         } else {
             mViewHolder = (MyViewHolder) convertView.getTag();
         }
-        Animation animation = null;
+        Animation animation;
         animation = AnimationUtils.loadAnimation(context, R.anim.action);
         animation.setDuration(200);
         convertView.startAnimation(animation);
-        animation = null;
         mViewHolder.sub.setText(myList.get(position).getSub());
         String p = myList.get(position).getPercent();
         double percent = Double.valueOf(p);

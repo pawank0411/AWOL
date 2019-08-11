@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -25,12 +26,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
+import java.util.Locale;
+import java.util.Objects;
 
 
 public class home extends AppCompatActivity {
-    String result, s;
-    ListData ld[];
+    String result;
+    ListData[] ld;
     int l, avgab;
     double avgat;
     public ListView rl;
@@ -58,10 +62,10 @@ public class home extends AppCompatActivity {
         setContentView(R.layout.activity_home);
 
         Bundle bundle = getIntent().getExtras();
-        myList = new ArrayList<ListData>();
+        myList = new ArrayList<>();
         if (bundle != null)
             result = bundle.getString("result");
-        String r[] = result.split("kkk");
+        String[] r = Objects.requireNonNull(result).split("kkk");
         result = r[0];
         avgab = 0;
         avgat = 0;
@@ -94,33 +98,33 @@ public class home extends AppCompatActivity {
         } finally {
             rl = findViewById(R.id.rl);
             ListData.ld = ld;
-            for (int i = 0; i < l; i++) {
+            myList.addAll(Arrays.asList(ld).subList(0, l));
+            /*for (int i = 0; i < l; i++) {
                 myList.add(ld[i]);
-            }
-
+            }*/
             adapter = new MyBaseAdapter(getApplicationContext(), myList);
             rl.setAdapter(adapter);
             dl = findViewById(R.id.drawer_layout);
             Toolbar toolbar = findViewById(R.id.toolbar);
             setSupportActionBar(toolbar);
             ActionBar actionbar = getSupportActionBar();
-            actionbar.setDisplayHomeAsUpEnabled(true);
+            Objects.requireNonNull(actionbar).setDisplayHomeAsUpEnabled(true);
             actionbar.setHomeAsUpIndicator(R.drawable.ic_menu);
             actionbar.setTitle(null);
             NavigationView navigationView = findViewById(R.id.nav_view);
             View headerView = navigationView.getHeaderView(0);
-            name = (TextView) headerView.findViewById(R.id.name);
-            reg = (TextView) headerView.findViewById(R.id.reg);
+            name = headerView.findViewById(R.id.name);
+            reg = headerView.findViewById(R.id.reg);
             name.setText("");
             reg.setText(r[1]);
-            avat = (TextView) headerView.findViewById(R.id.avat);
-            avat.setText(String.format("%.2f", avgat));
-            avab = (TextView) headerView.findViewById(R.id.avab);
+            avat = headerView.findViewById(R.id.avat);
+            avat.setText(String.format(Locale.US,"%.2f", avgat));
+            avab = headerView.findViewById(R.id.avab);
             avab.setText(String.valueOf(avgab));
             navigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {
                         @Override
-                        public boolean onNavigationItemSelected(MenuItem menuItem) {
+                        public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
                             dl.closeDrawers();
                             switch (menuItem.getItemId()) {
                                 case R.id.sa:
@@ -140,7 +144,7 @@ public class home extends AppCompatActivity {
                                 case R.id.lgout:
                                     edit = sub.edit();
                                     edit.putBoolean("logout", true);
-                                    edit.commit();
+                                    edit.apply();
                                     finish();
                                     break;
                                 case R.id.pab:
@@ -173,7 +177,7 @@ public class home extends AppCompatActivity {
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(400);
                 edit.putString(code, jObj.toString());
-                edit.commit();
+                edit.apply();
                 return "just now";
             } else
                 return DateUtils.getRelativeTimeSpanString(old.getLong("updated"), new Date().getTime(), 0).toString();
@@ -190,10 +194,9 @@ public class home extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                dl.openDrawer(GravityCompat.START);
-                return true;
+        if (item.getItemId() == android.R.id.home) {
+            dl.openDrawer(GravityCompat.START);
+            return true;
         }
         return super.onOptionsItemSelected(item);
     }

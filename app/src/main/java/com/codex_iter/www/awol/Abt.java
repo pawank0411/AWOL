@@ -14,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 public class Abt extends AppCompatActivity {
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
-    private TextView ver, dis, para, dev, mo, pa, neh;
-    private ImageView logo;
+    @SuppressWarnings("FieldCanBeLocal")
+    private TextView  dis, para, dev, mo, pa, neh;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +40,7 @@ public class Abt extends AppCompatActivity {
         mo = findViewById(R.id.mohit);
         pa = findViewById(R.id.pawan);
         neh = findViewById(R.id.nehal);
-        logo = findViewById(R.id.logo);
+        ImageView logo = findViewById(R.id.logo);
         dev = findViewById(R.id.dev);
         if (!dark) {
             dev.setTextColor(Color.parseColor("#141831"));
