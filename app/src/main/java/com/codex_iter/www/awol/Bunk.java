@@ -69,7 +69,16 @@ public class Bunk extends AppCompatActivity{
         for(int i=0;i<ld.length;i++)
             subn[i]=ld[i].getSub();
         sub=findViewById(R.id.sub);
-        ArrayAdapter a=new ArrayAdapter(this,R.layout.drop_down,subn);
+        ArrayAdapter a;
+        if(!dark)
+        {
+            a=new ArrayAdapter(this,R.layout.drop_down,subn);
+        }
+        else
+        {
+            a=new ArrayAdapter(this,R.layout.drop_down_dark,subn);
+        }
+        //ArrayAdapter a=new ArrayAdapter(this,R.layout.drop_down,subn);
         sub.setAdapter(a);
         sub.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener(){
             @Override

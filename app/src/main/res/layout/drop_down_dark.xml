@@ -12,4 +12,4 @@
     android:textColor="@color/colorPrimary"
     android:textSize="18dp"
     android:layout_marginLeft="5dp"
-    android:background="@drawable/spinner_item"/>
+    android:background="@drawable/spinner_item_dark"/>

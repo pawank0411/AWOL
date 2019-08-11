@@ -14,17 +14,14 @@
         android:id="@+id/sub"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1.5"
+        android:layout_weight="2"
         android:layout_gravity="center"
         android:spinnerMode="dropdown"
         android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
         />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginHorizontal="10dp"
-        android:background="#000" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -161,13 +158,6 @@
         android:layout_weight="0.75"
         android:background="@drawable/btnr"
         android:text="Attend" />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginHorizontal="10dp"
-        android:layout_marginTop="10dp"
-        android:background="#000" />
 
     <TextView
         android:id="@+id/result"
