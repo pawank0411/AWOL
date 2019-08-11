@@ -14,8 +14,8 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="A"
-        android:textSize="90dp"
+        android:text="@string/a"
+        android:textSize="90sp"
         android:fontFamily="cursive"
         android:gravity="center"
         android:layout_marginTop="50dp"
@@ -38,13 +38,14 @@
         android:layout_weight="1.1"
         android:inputType="number"
         android:maxLines="1"
-        android:hint="USERNAME"
+        android:hint="@string/username"
         android:textColorHint="@color/colorAccent"
         android:textColor="@color/colorAccent"
         android:paddingHorizontal="10dp"
         android:focusedByDefault="true"
         android:fontFamily="sans-serif"
-        android:layout_marginHorizontal="35dp" />
+        android:layout_marginHorizontal="35dp"
+        tools:ignore="Autofill,UnusedAttribute" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/password_visibility"
@@ -54,19 +55,21 @@
             android:layout_marginHorizontal="35dp"
             android:layout_marginTop="15dp"
             app:hintEnabled="false"
-            app:passwordToggleEnabled="true">
+            app:passwordToggleEnabled="true"
+            tools:ignore="UnusedAttribute">
 
             <EditText
                 android:id="@+id/pass"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:hint="PASSWORD"
+                android:hint="@string/password"
                 android:focusedByDefault="true"
                 android:fontFamily="sans-serif"
                 android:inputType="textPassword"
                 android:paddingHorizontal="10dp"
                 android:textColor="@color/colorAccent"
-                android:textColorHint="@color/colorAccent" />
+                android:textColorHint="@color/colorAccent"
+                tools:ignore="Autofill" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -77,8 +80,9 @@
         android:layout_height="wrap_content"
         android:background="@drawable/btnr"
         android:layout_marginHorizontal="30dp"
-        android:text="Login"
-        android:textSize="20dp"
+        android:text="@string/login"
+        android:textSize="20sp"
         android:paddingVertical="15dp"
-        android:textAllCaps="false"/>
+        android:textAllCaps="false"
+        tools:ignore="UnusedAttribute" />
 </LinearLayout>

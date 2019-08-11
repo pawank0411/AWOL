@@ -30,14 +30,17 @@
             android:configChanges="uiMode"
             />
         <activity android:name=".Bunk"
+            android:screenOrientation="portrait"
             android:configChanges="uiMode"/>
         <activity android:name=".Abt"
             android:configChanges="uiMode"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <receiver android:name=".AlramReceiver"
             android:enabled="true"
             android:exported="false"/>
         <activity android:name=".SettingsActivity"
+            android:screenOrientation="portrait"
             android:configChanges="uiMode"/>
     </application>
 </manifest>

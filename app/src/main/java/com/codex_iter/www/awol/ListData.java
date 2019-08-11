@@ -1,4 +1,5 @@
 package com.codex_iter.www.awol;
+import java.util.Locale;
 import java.util.Scanner;
 
 
@@ -7,9 +8,8 @@ import java.util.Scanner;
  * */
 public class ListData {
 
-    String sub,code,upd,theory,lab,percent,that="",labt="",old="",bunk_text_str="Don't Bunk Anymore";
-    double thT,thp,lat,lap,tc,tha,la;
-    int status;
+    private String sub,code,upd,theory,lab,percent,that="",labt="",old="",bunk_text_str="Don't Bunk Anymore";
+    private double thT,thp,lat,lap,tc,tha,la;
      static ListData[] ld;
     public String getClasses() {
         return Integer.toString((int)(thT+lat));
@@ -88,7 +88,7 @@ public class ListData {
             thp = in.nextInt();
             char c = in.next().charAt(0);
             thT = in.nextInt();
-            String res = " ("+String.format("%.0f",((thp / thT) * 100) )+"%)";
+            String res = " ("+String.format(Locale.US, "%.0f",((thp / thT) * 100) )+"%)";
             this.theory = theory;
             setThat(res);
         }
@@ -108,7 +108,7 @@ public class ListData {
             char c = in.next().charAt(0);
             lat = in.nextInt();
             this.lab = lab ;
-                    setLabt(" ("+String.format("%.0f",((lap / lat) * 100))+"%)");
+                    setLabt(" ("+String.format(Locale.US, "%.0f",((lap / lat) * 100))+"%)");
         }
     }
 
@@ -127,7 +127,7 @@ public class ListData {
     }
 
     public void setPercent(String percent) {
-        this.percent = String.format("%.1f",new Scanner(percent).nextDouble());
+        this.percent = String.format(Locale.US, "%.1f",new Scanner(percent).nextDouble());
     }
     public void setBunk()
     {
