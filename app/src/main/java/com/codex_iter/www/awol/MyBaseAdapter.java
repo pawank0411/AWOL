@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -54,17 +55,17 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
         double percent = Double.valueOf(p);
 
         if (percent > 75){
-            mViewHolder.ta.setBackgroundColor(Color.parseColor("#2aac4b"));
+            mViewHolder.ta.setBackgroundResource(R.drawable.percent_back_green);
         } else if (percent < 65){
             if (percent > 55){
-                mViewHolder.ta.setBackgroundColor(Color.parseColor("#FFF3F025"));
+                mViewHolder.ta.setBackgroundResource(R.drawable.percent_back_yellow);
             }
         } else if (percent > 65) {
             if (percent < 75) {
-                mViewHolder.ta.setBackgroundColor(Color.parseColor("#FFF3F025"));
+                mViewHolder.ta.setBackgroundResource(R.drawable.percent_back_yellow);
             }
         } else {
-            mViewHolder.ta.setBackgroundColor(Color.parseColor("#F5FC0101"));
+            mViewHolder.ta.setBackgroundResource(R.drawable.percent_back_red);
         }
         mViewHolder.ta.setText(myList.get(position).getPercent()+"%");
 //        mViewHolder.tha.setText(myList.get(position).getThat());
@@ -118,7 +119,8 @@ public class MyBaseAdapter extends ArrayAdapter<ListData> {
 
     private class MyViewHolder {
 
-        TextView sub,ta,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents,bunk_text ;
+        TextView sub,lu,th,prac,ab,tc,tha,la, total, theory, updated, pract,classes,absents,bunk_text ;
+        Button ta;
         ImageView up,down;
         CardView cardView;
         private MyViewHolder(View view) {

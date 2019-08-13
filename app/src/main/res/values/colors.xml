@@ -5,9 +5,9 @@
     <color name="colorPrimaryDark">#263238</color>
     <color name="colorwhite">#ffffff</color>
     <color name="darkColorPrimary">#1e2756</color>
-    <color name="darkColorPrimaryDark">#141831</color>
+    <color name="darkColorPrimaryDark">#000000</color>
     <color name="darkColorAccent">#2aac4b</color>
     <color name="mid">#F3F025</color>
     <color name="danger">#F5FC0101</color>
-    <color name="black">#FF0C0C0C</color>
+    <color name="black">#000000</color>
 </resources>
