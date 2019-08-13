@@ -3,8 +3,6 @@ package com.codex_iter.www.awol;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Vibrator;
@@ -48,30 +46,6 @@ public class home extends AppCompatActivity {
     DrawerLayout dl;
     private static final String PREFS_NAME = "prefs";
     private static final String PREF_DARK_THEME = "dark_theme";
-
-    int[][] state = new int[][] {
-            new int[] {android.R.attr.state_checked}, // checked
-            new int[] {-android.R.attr.state_checked}
-    };
-
-    int[] color = new int[] {
-            Color.rgb(255,46,84),
-            (Color.BLACK)
-    };
-
-    ColorStateList csl = new ColorStateList(state, color);
-
-    int[][] state2 = new int[][] {
-            new int[] {android.R.attr.state_checked}, // checked
-            new int[] {-android.R.attr.state_checked}
-    };
-
-    int[] color2 = new int[] {
-            Color.rgb(255,46,84),
-            (Color.GRAY)
-    };
-
-    ColorStateList csl2 = new ColorStateList(state2, color2);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,13 +121,6 @@ public class home extends AppCompatActivity {
             avat.setText(String.format(Locale.US,"%.2f", avgat));
             avab = headerView.findViewById(R.id.avab);
             avab.setText(String.valueOf(avgab));
-            if(dark)
-            {
-                //navigationView.setBackgroundColor(Color.parseColor("#FFFFFF"));
-                navigationView.setItemTextColor(csl);
-                navigationView.setItemIconTintList(csl2);
-                //navigationView.setItemBackgroundResource();
-            }
             navigationView.setNavigationItemSelectedListener(
                     new NavigationView.OnNavigationItemSelectedListener() {
                         @Override
