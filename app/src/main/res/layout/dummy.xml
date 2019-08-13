@@ -17,7 +17,8 @@
         android:layout_centerVertical="true"
         android:orientation="vertical"
         android:paddingVertical="5dp"
-        android:weightSum="6.5">
+        android:weightSum="6.5"
+        tools:ignore="UnusedAttribute">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -35,7 +36,8 @@
                 android:layout_weight="1"
                 android:padding="2dp"
                 android:src="@drawable/up"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:contentDescription="@string/todo" />
 
             <TextView
                 android:id="@+id/sub"
@@ -51,6 +53,7 @@
 
             <Button
                 android:id="@+id/ta"
+
                 android:layout_width="60sp"
                 android:layout_height="40sp"
                 android:text="@string/_95_5"
@@ -71,7 +74,8 @@
                 android:layout_weight="1"
                 android:padding="2dp"
                 android:src="@drawable/down"
-                android:visibility="invisible" />
+                android:visibility="invisible"
+                android:contentDescription="@string/todo" />
         </LinearLayout>
 
 
