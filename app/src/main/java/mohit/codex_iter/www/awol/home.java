@@ -356,12 +356,39 @@ public class home extends BaseThemedActivity {
     @Override
     public void onBackPressed() {
 
-
-        if (this.dl.isDrawerOpen(GravityCompat.START)) {
+if (this.dl.isDrawerOpen(GravityCompat.START)) {
             this.dl.closeDrawer(GravityCompat.START);
         } else {
-            moveTaskToBack(true);
+            AlertDialog.Builder binder=new AlertDialog.Builder(this);
+            binder.setMessage("Do you want to exit  application ?");
+            binder.setTitle(Html.fromHtml("<font color='#FF7F27'>Message</font>"));
+                    binder.setCancelable(false);
+                    binder.setPositiveButton(Html.fromHtml("<font color='#FF7F27'>Yes</font>"), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                           home.this.finish();
+                            moveTaskToBack(true);
+
+
+                        }
+                    });
+                    binder.setNegativeButton(Html.fromHtml("<font color='#FF7F27'>No</font>"), new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+            AlertDialog alertDialog=binder.create();
+            alertDialog.show();
+           final Button nbutton = alertDialog.getButton(DialogInterface.BUTTON_NEGATIVE);
+            nbutton.setBackgroundColor(Color.RED);
+            Button pbutton = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE);
+            pbutton.setBackgroundColor(Color.GREEN);
+
+
         }
+
 
     }
 
