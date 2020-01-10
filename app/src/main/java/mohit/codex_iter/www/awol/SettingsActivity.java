@@ -2,6 +2,7 @@ package mohit.codex_iter.www.awol;
 
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -34,9 +35,14 @@ public class SettingsActivity extends BaseThemedActivity {
     }
 
     private void setupToolbar() {
+
+
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Settings");
+
+
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         }
@@ -46,6 +52,11 @@ public class SettingsActivity extends BaseThemedActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
         }
+        if(!dark){
+            toolbar.setTitleTextColor(getResources().getColor(R.color.black));
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
+        }
+
     }
 
     private void setupPreferences() {

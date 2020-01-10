@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.TypedValue;
@@ -161,6 +163,7 @@ public class Bunk extends BaseThemedActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         Objects.requireNonNull(getSupportActionBar()).setTitle("Plan a bunk");
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
         }
@@ -169,6 +172,10 @@ public class Bunk extends BaseThemedActivity {
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Objects.requireNonNull(getSupportActionBar()).setDisplayShowHomeEnabled(true);
+        }
+        if(!dark){
+            toolbar.setTitleTextColor(getResources().getColor(R.color.black));
+            toolbar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.black), PorterDuff.Mode.SRC_ATOP);
         }
         this.ld = ListData.ld;
         String[] subn = new String[ld.length];
