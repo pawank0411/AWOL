@@ -6,7 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import codex.codex_iter.www.awol.R
 
 abstract class BaseThemedActivity : AppCompatActivity() {
-    protected var preferences: SharedPreferences? = null
+    protected open var preferences: SharedPreferences? = null
     protected var dark = false
     override fun setTheme(resId: Int) {
         val preferences = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)

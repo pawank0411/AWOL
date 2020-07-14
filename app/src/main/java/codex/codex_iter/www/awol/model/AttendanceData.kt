@@ -1,11 +1,13 @@
 package codex.codex_iter.www.awol.model
 
 import java.util.*
+import kotlin.math.floor
 
 class AttendanceData {
     var sub: String? = null
-    var code: String? = null
+    private var code: String? = null
     var upd: String? = null
+    var absent: Int? = null
     var theory: String? = null
         private set
     var lab: String? = null
@@ -14,20 +16,36 @@ class AttendanceData {
     var that = ""
     var labt = ""
     var old = ""
-    var bunk_text_str = "Don't Bunk Anymore"
+    var bunkTextStr = "Don't Bunk Anymore"
         private set
     private var thT = 0.0
     private var thp = 0.0
     private var lat = 0.0
     private var lap = 0.0
     val classes: String
-        get() = Integer.toString((thT + lat).toInt())
+        get() = (thT + lat).toInt().toString()
 
     val status: Int
         get() {
             val d = Scanner(percent).nextDouble()
             return if (d < 65) 1 else if (d >= 65 && d < 75) 2 else if (d >= 75 && d < 90) 3 else 4
         }
+
+    fun setSubjectCode (code: String) {
+        this.code = code
+    }
+
+    fun setOldAttendance (old: String) {
+        this.old = old
+    }
+
+    fun setSubject (subject: String) {
+        this.sub = subject
+    }
+
+    fun setUpdate (upd : String){
+        this.upd = upd
+    }
 
     fun setTheory(theory: String) {
         if (theory == "Not Applicable") {
@@ -60,13 +78,10 @@ class AttendanceData {
         }
     }
 
-    val absent: String
-        get() {
-            val i = Math.floor(lat + thT - thp - lap).toInt()
-            return Integer.toString(i)
-        }
-
-    fun getPercent(): String? {
+    fun getAbsent(): Int {
+        return floor(lat + thT - thp - lap).toInt()
+    }
+    private fun getPercent(): String? {
         return percent
     }
 
@@ -75,46 +90,42 @@ class AttendanceData {
     }
 
     fun setBunk() {
-        val percent_class = getPercent()!!.toDouble()
-        val total_class = classes.toDouble()
-        val absent = absent.toDouble()
-        val present = total_class - absent
+        val percentClass = getPercent()!!.toDouble()
+        val totalClass = classes.toDouble()
+        val absent = absent!!.toDouble()
+        val present = totalClass - absent
         var i: Int
-        if (percent_class >= 75) {
+        if (percentClass >= 75) {
             //to be continued...
             i = 0
             while (i != -99) {
-                val p = present / (total_class + i) * 100
+                val p = present / (totalClass + i) * 100
                 if (p < 75) break
                 i++
             }
             i--
             if (i > 0) {
                 if (i != 1) {
-                    bunk_text_str = "BUNK $i classes for 75%"
+                    bunkTextStr = "BUNK $i classes for 75%"
                 } else {
-                    bunk_text_str = "BUNK $i class for 75%"
+                    bunkTextStr = "BUNK $i class for 75%"
                 }
             }
         } else {
             i = 0
             while (i != -99) {
-                val p = (present + i) / (total_class + i) * 100
+                val p = (present + i) / (totalClass + i) * 100
                 if (p > 75) break
                 i++
             }
             i--
             if (i > 0) {
                 if (i != 1) {
-                    bunk_text_str = "Attend $i classes for 75%"
+                    bunkTextStr = "Attend $i classes for 75%"
                 } else {
-                    bunk_text_str = "Attend $i class for 75%"
+                    bunkTextStr = "Attend $i class for 75%"
                 }
             }
         }
-    }
-
-    companion object {
-        var attendanceData: Array<AttendanceData?>
     }
 }

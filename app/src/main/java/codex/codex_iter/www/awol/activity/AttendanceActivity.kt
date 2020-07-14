@@ -1,6 +1,7 @@
 package codex.codex_iter.www.awol.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -9,10 +10,7 @@ import android.content.SharedPreferences
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.FileUriExposedException
-import android.os.Vibrator
+import android.os.*
 import android.text.Html
 import android.text.format.DateUtils
 import android.util.Log
@@ -26,6 +24,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.FileProvider
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -106,28 +105,28 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
     @BindView(R.id.toolbar)
     var toolbar: Toolbar? = null
     private var result: String? = null
-    private var attendanceData: Array<AttendanceData?>
+    private lateinit var attendanceData: Array<AttendanceData?>
     private var l = 0
     private var avgab = 0
     private var avgat = 0.0
-    private var r: Array<String>
+    private lateinit var r: Array<String>
     var attendanceDataArrayList: ArrayList<AttendanceData>? = ArrayList()
     private var code: String? = null
-    private var student_semester: String? = null
+    private var studentSemester: String? = null
     private var sub: SharedPreferences? = null
     private var userm: SharedPreferences? = null
-    private var studentnamePrefernces: SharedPreferences? = null
-    private override var preferences: SharedPreferences? = null
+    private var studentNamePreferences: SharedPreferences? = null
+    override var preferences: SharedPreferences? = null
     private var sharedPreferences: SharedPreferences? = null
     private var edit: SharedPreferences.Editor? = null
     private var adapter: AttendanceAdapter? = null
-    private var no_attendance = false
+    private var noAttendance = false
     private var api: String? = null
     private var showResult: String? = null
     private var showlectures: String? = null
     private var dialog: BottomSheetDialog? = null
-    private var read_database = 0
-    private val custom_menu: Menu? = null
+    private var readDatabase = 0
+    private val customMenu: Menu? = null
     var state = arrayOf(intArrayOf(android.R.attr.state_checked), intArrayOf(-android.R.attr.state_checked))
     var color = intArrayOf(
             Color.rgb(255, 46, 84),
@@ -150,10 +149,10 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
         Objects.requireNonNull(this.supportActionBar).displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar!!.setDisplayShowCustomEnabled(true)
         Objects.requireNonNull(supportActionBar).setCustomView(R.layout.activity_action_bar)
-        val view_cus = supportActionBar!!.customView
-        val title: MaterialTextView = view_cus.findViewById(R.id.title)
-        val icon = view_cus.findViewById<ImageView>(R.id.image)
-        val share = view_cus.findViewById<ImageView>(R.id.share)
+        val viewCus = supportActionBar!!.customView
+        val title: MaterialTextView = viewCus.findViewById(R.id.title)
+        val icon = viewCus.findViewById<ImageView>(R.id.image)
+        val share = viewCus.findViewById<ImageView>(R.id.share)
         preferences = getSharedPreferences("CLOSE", Context.MODE_PRIVATE)
         val editor: SharedPreferences.Editor = preferences.edit()
         Constants.offlineDataPreference = getSharedPreferences("OFFLINEDATA", Context.MODE_PRIVATE)
@@ -164,9 +163,9 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
             who_layout!!.visibility = View.GONE
         }
         if (bundle != null) {
-            val logincheck = bundle.getBoolean(Constants.LOGIN)
+            val loginCheck = bundle.getBoolean(Constants.LOGIN)
             api = bundle.getString(Constants.API)
-            no_attendance = bundle.getBoolean(Constants.NOATTENDANCE)
+            noAttendance = bundle.getBoolean(Constants.NOATTENDANCE)
             result = bundle.getString(Constants.RESULTS)
         }
         val firebaseConfig = FirebaseConfig()
@@ -218,10 +217,10 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
             recyclerView!!.setBackgroundColor(Color.parseColor("#141414"))
             title.setTextColor(Color.parseColor("#ffffff"))
         }
-        share.setOnClickListener { view: View? ->
-            if (no_attendance) {
-                val snackbar = Snackbar.make(mainLayout!!, "Attendance is currently unavailable", Snackbar.LENGTH_SHORT)
-                snackbar.show()
+        share.setOnClickListener {
+            if (noAttendance) {
+                val snackBar = Snackbar.make(mainLayout!!, "Attendance is currently unavailable", Snackbar.LENGTH_SHORT)
+                snackBar.show()
             } else {
                 val bitmap = ScreenshotUtils.getScreenShot(recyclerView)
                 if (bitmap != null) {
@@ -242,21 +241,21 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                 for (documentChange in queryDocumentSnapshots.documentChanges) {
                     showResult = documentChange.document.getString(Constants.SHOWRESULT)
                     showlectures = documentChange.document.getString(Constants.SHOWLECTUURES)
-                    read_database = Objects.requireNonNull(documentChange.document.getString("fetch_file")).toInt()
+                    readDatabase = Objects.requireNonNull(documentChange.document.getString("fetch_file")).toInt()
                     sharedPreferences.edit().putString(Constants.SHOWRESULT, showResult).apply()
                     sharedPreferences.edit().putString(Constants.SHOWLECTUURES, showlectures).apply()
                     if (showlectures == "0") navigationView!!.menu.findItem(R.id.lecture).isVisible = false
-                    if (sharedPreferences.getInt(Constants.READ_DATABASE, 0) < read_database) {
-                        sharedPreferences.edit().putInt(Constants.READ_DATABASE, read_database).apply()
+                    if (sharedPreferences.getInt(Constants.READ_DATABASE, 0) < readDatabase) {
+                        sharedPreferences.edit().putInt(Constants.READ_DATABASE, readDatabase).apply()
                         showBottomSheetDialog()
                         downloadfile()
                     }
                 }
             }
         }
-        studentnamePrefernces = getSharedPreferences(Constants.STUDENT_NAME, Context.MODE_PRIVATE)
-        val studentName = studentnamePrefernces.getString(Constants.STUDENT_NAME, "")
-        if (no_attendance) {
+        studentNamePreferences = getSharedPreferences(Constants.STUDENT_NAME, Context.MODE_PRIVATE)
+        val studentName = studentNamePreferences.getString(Constants.STUDENT_NAME, "")
+        if (noAttendance) {
             navigationView!!.menu.findItem(R.id.pab).isVisible = false
             recyclerView!!.visibility = View.GONE
             noAttendanceLayout!!.visibility = View.VISIBLE
@@ -277,7 +276,7 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
         sub = getSharedPreferences("sub",
                 Context.MODE_PRIVATE)
         try {
-            val jObj1 = JSONObject(result)
+            val jObj1 = JSONObject(result.toString())
             val arr = jObj1.getJSONArray("griddata")
             l = arr.length()
             attendanceData = arrayOfNulls(l)
@@ -286,17 +285,17 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                 attendanceData[i] = AttendanceData()
                 code = jObj.getString("subjectcode")
                 val ck = Updated(jObj, sub, code, i)
-                attendanceData[i].setCode(code)
-                attendanceData[i].setSub(jObj.getString("subject"))
-                attendanceData[i]!!.theory = jObj.getString("Latt")
-                attendanceData[i]!!.lab = jObj.getString("Patt")
-                attendanceData[i].setUpd(ck)
-                attendanceData[i]!!.percent = jObj.getString("TotalAttandence")
+                attendanceData[i]!!.setSubjectCode(code.toString())
+                attendanceData[i]!!.setSubject(jObj.getString("subject"))
+                attendanceData[i]!!.setTheory(jObj.getString("Latt"))
+                attendanceData[i]!!.setLab(jObj.getString("Patt"))
+                attendanceData[i]!!.setUpdate(ck)
+                attendanceData[i]!!.setPercent(jObj.getString("TotalAttandence"))
                 attendanceData[i]!!.setBunk()
                 avgat += jObj.getString("TotalAttandence").trim { it <= ' ' }.toDouble()
-                avgab += attendanceData[i].getAbsent().toInt()
-                student_semester = jObj.getString(Constants.STUDENTSEMESTER)
-                sharedPreferences.edit().putString(Constants.STUDENTSEMESTER, student_semester).apply()
+                avgab += attendanceData[i]!!.getAbsent()
+                studentSemester = jObj.getString(Constants.STUDENTSEMESTER)
+                sharedPreferences!!.edit().putString(Constants.STUDENTSEMESTER, studentSemester).apply()
             }
             avgat /= l.toDouble()
             avgab /= l
@@ -330,27 +329,27 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
             val reg = headerView.findViewById<TextView>(R.id.reg)
             name.text = studentName
             val split = studentName!!.split("\\s+".toRegex()).toTypedArray()
-            if (!split[0].isEmpty()) {
+            if (split[0].isNotEmpty()) {
                 title.text = "Hi, " + convertToTitleCaseIteratingChars(split[0]) + "!"
             } else {
                 title.text = "Home"
             }
-            reg.setText(preferences.getString("RegistrationNumber", null))
+            reg.text = preferences!!.getString("RegistrationNumber", null)
             val avat = headerView.findViewById<TextView>(R.id.avat)
-            avat.setText(preferences.getInt("AveragePresent", 0).toString() + "%")
+            avat.text = preferences!!.getInt("AveragePresent", 0).toString() + "%"
             val avab = headerView.findViewById<TextView>(R.id.avab)
-            avab.setText(preferences.getString("AverageAbsent", null))
-            checkResult!!.setOnClickListener { view: View? -> fetchResult() }
+            avab.text = preferences!!.getString("AverageAbsent", null)
+            checkResult!!.setOnClickListener { fetchResult() }
         }
     }
 
-    fun downloadfile() {
-        val storageReference_data = FirebaseStorage.getInstance().reference.child("data.txt")
-        val storageReference_video = FirebaseStorage.getInstance().reference.child("video.txt")
+    fun downloadFile() {
+        val storageReferenceData = FirebaseStorage.getInstance().reference.child("data.txt")
+        val storageReferenceVideo = FirebaseStorage.getInstance().reference.child("video.txt")
         val downloadScrapFile = DownloadScrapFile(this@AttendanceActivity)
-        storageReference_data.downloadUrl.addOnSuccessListener { uri: Uri ->
+        storageReferenceData.downloadUrl.addOnSuccessListener { uri: Uri ->
             downloadScrapFile.newDownload(uri.toString(), "data", false, "")
-            storageReference_video.downloadUrl.addOnSuccessListener { uri1: Uri ->
+            storageReferenceVideo.downloadUrl.addOnSuccessListener { uri1: Uri ->
                 downloadScrapFile.newDownload(uri1.toString(), "video", false, "")
                 hideBottomSheetDialog()
             }.addOnFailureListener { e: Exception ->
@@ -372,11 +371,11 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
         Constants.offlineDataEditor = Constants.offlineDataPreference!!.edit()
         val gson = Gson()
         val json = gson.toJson(attendanceDataArrayList)
-        Constants.offlineDataEditor.putString("StudentAttendance", json)
-        Constants.offlineDataEditor.apply()
+        Constants.offlineDataEditor!!.putString("StudentAttendance", json)
+        Constants.offlineDataEditor!!.apply()
     }
 
-    val savedAttendance: Unit
+    private val savedAttendance: Unit
         get() {
             val snackbar = Snackbar.make(mainLayout!!, "Offline mode enabled", Snackbar.LENGTH_SHORT)
             snackbar.show()
@@ -389,21 +388,15 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
             }
         }
 
-    fun fetchResult() {
+    private fun fetchResult() {
         userm = getSharedPreferences("user",
                 Context.MODE_PRIVATE)
-        val u = userm.getString("user", "")
-        val p = userm.getString("pass", "")
+        val u = userm!!.getString("user", "")
+        val p = userm!!.getString("pass", "")
         getData(api!!, u!!, p!!)
         showBottomSheetDialog()
     }
 
-    //
-    //    public static int convertDpToPixel(float dp) {
-    //        DisplayMetrics metrics = Resources.getSystem().getDisplayMetrics();
-    //        float px = dp * (metrics.densityDpi / 160f);
-    //        return Math.round(px);
-    //    }
     private fun getData(vararg param: String) {
         val sharedPreferences = application.getSharedPreferences("Result", Context.MODE_PRIVATE)
         val queue = Volley.newRequestQueue(applicationContext)
@@ -426,24 +419,24 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                     hideBottomSheetDialog()
                     if (error is AuthFailureError) {
                         if (sharedPreferences.getString("StudentResult", null) == null) {
-                            val snackbar = Snackbar.make(mainLayout!!, "Wrong Credentials!", Snackbar.LENGTH_SHORT)
-                            snackbar.show()
+                            val snackBar = Snackbar.make(mainLayout!!, "Wrong Credentials!", Snackbar.LENGTH_SHORT)
+                            snackBar.show()
                         } else {
                             val intent = Intent(this@AttendanceActivity, ResultActivity::class.java)
                             startActivity(intent)
                         }
                     } else if (error is ServerError) {
                         if (sharedPreferences.getString("StudentResult", null) == null) {
-                            val snackbar = Snackbar.make(mainLayout!!, "Wrong Credentials!", Snackbar.LENGTH_SHORT)
-                            snackbar.show()
+                            val snackBar = Snackbar.make(mainLayout!!, "Wrong Credentials!", Snackbar.LENGTH_SHORT)
+                            snackBar.show()
                         } else {
                             val intent = Intent(this@AttendanceActivity, ResultActivity::class.java)
                             startActivity(intent)
                         }
                     } else if (error is NetworkError) {
                         if (sharedPreferences.getString("StudentResult", null) == null) {
-                            val snackbar = Snackbar.make(mainLayout!!, "Cannot establish connection", Snackbar.LENGTH_SHORT)
-                            snackbar.show()
+                            val snackBar = Snackbar.make(mainLayout!!, "Cannot establish connection", Snackbar.LENGTH_SHORT)
+                            snackBar.show()
                         } else {
                             Log.e("Volley_error", error.toString())
                             val intent = Intent(this@AttendanceActivity, ResultActivity::class.java)
@@ -451,8 +444,8 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                         }
                     } else {
                         if (sharedPreferences.getString("StudentResult", null) == null) {
-                            val snackbar = Snackbar.make(mainLayout!!, "Cannot establish connection", Snackbar.LENGTH_SHORT)
-                            snackbar.show()
+                            val snackBar = Snackbar.make(mainLayout!!, "Cannot establish connection", Snackbar.LENGTH_SHORT)
+                            snackBar.show()
                         } else {
                             val intent = Intent(this@AttendanceActivity, ResultActivity::class.java)
                             startActivity(intent)
@@ -470,12 +463,11 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
         queue.add(postRequest)
     }
 
-    @Throws(JSONException::class)
-    private fun Updated(jObj: JSONObject, sub: SharedPreferences?, code: String?, i: Int): String {
+    private fun updated(jObj: JSONObject, sub: SharedPreferences?, code: String?, i: Int): String {
         return if (sub!!.contains(code)) {
-            val old = JSONObject(sub.getString(code, ""))
-            val status_lg = getSharedPreferences("status", 0)
-            val status = status_lg.getString("status", "")
+            val old = JSONObject(sub.getString(code, "").toString())
+            val statusLg = getSharedPreferences("status", 0)
+            val status = statusLg.getString("status", "")
             if (status == "0") {
                 old.put("Latt", "")
                 old.put("Patt", "")
@@ -483,22 +475,27 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
             }
             if (old.getString("Latt") != jObj.getString("Latt") || old.getString("Patt") != jObj.getString("Patt")) {
                 jObj.put("updated", Date().time)
-                attendanceData[i].setOld(old.getString("TotalAttandence"))
-                edit = sub.edit()
-                val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                v?.vibrate(400)
-                edit.putString(code, jObj.toString())
-                edit.apply()
+                attendanceData[i]!!.setOldAttendance(old.getString("TotalAttandence"))
+                vibratePhone()
+                sub.edit()!!.putString(code, jObj.toString())
+                sub.edit()!!.apply()
                 "Just now"
             } else DateUtils.getRelativeTimeSpanString(old.getLong("updated"), Date().time, 0).toString()
         } else {
             jObj.put("updated", Date().time)
-            edit = sub.edit()
-            val v = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-            v?.vibrate(400)
-            edit.putString(code, jObj.toString())
-            edit.commit()
+            vibratePhone()
+            sub.edit()!!.putString(code, jObj.toString())
+            sub.edit()!!.apply()
             "Just now"
+        }
+    }
+
+    private fun Activity.vibratePhone() {
+        val vibrator = this.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+        if (Build.VERSION.SDK_INT >= 26) {
+            vibrator.vibrate(VibrationEffect.createOneShot(400, VibrationEffect.DEFAULT_AMPLITUDE))
+        } else {
+            vibrator.vibrate(400)
         }
     }
 
@@ -520,7 +517,7 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
         }
     }
 
-    fun shareScreenshot_low(file: File?) {
+    fun shareScreenshotLow(file: File?) {
         val uri = Uri.fromFile(file) //Convert file path into Uri for sharing
         val intent = Intent()
         intent.action = Intent.ACTION_SEND
@@ -531,7 +528,7 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
         startActivity(Intent.createChooser(intent, getString(R.string.share_title)))
     }
 
-    fun showBottomSheetDialog() {
+    private fun showBottomSheetDialog() {
         //    private BottomSheetBehavior bottomSheetBehavior;
         @SuppressLint("InflateParams") val view = layoutInflater.inflate(R.layout.bottomprogressbar, null)
         if (dialog == null) {
@@ -570,17 +567,17 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                 if (sharedPreferences!!.getString(Constants.SHOWLECTUURES, "0") != "0") {
                     val intent = Intent(this@AttendanceActivity, OnlineLectureSubjects::class.java)
                     when (sharedPreferences!!.getString(Constants.STUDENTSEMESTER, "1")) {
-                        "1" -> student_semester = "1st"
-                        "2" -> student_semester = "2nd"
-                        "3" -> student_semester = "3rd"
-                        "4" -> student_semester = "4th"
-                        "5" -> student_semester = "5th"
-                        "6" -> student_semester = "6th"
-                        "7" -> student_semester = "7th"
-                        "8" -> student_semester = "8th"
+                        "1" -> studentSemester = "1st"
+                        "2" -> studentSemester = "2nd"
+                        "3" -> studentSemester = "3rd"
+                        "4" -> studentSemester = "4th"
+                        "5" -> studentSemester = "5th"
+                        "6" -> studentSemester = "6th"
+                        "7" -> studentSemester = "7th"
+                        "8" -> studentSemester = "8th"
                     }
-                    intent.putExtra(Constants.STUDENTSEMESTER, student_semester)
-                    intent.putExtra(Constants.READ_DATABASE2, read_database)
+                    intent.putExtra(Constants.STUDENTSEMESTER, studentSemester)
+                    intent.putExtra(Constants.READ_DATABASE2, readDatabase)
                     startActivity(intent)
                 }
             }
@@ -595,10 +592,9 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                 binder.setTitle(Html.fromHtml("<font color='#FF7F27'>Message</font>"))
                 binder.setCancelable(false)
                 binder.setPositiveButton(Html.fromHtml("<font color='#FF7F27'>Yes</font>")) { dialog: DialogInterface?, which: Int ->
-                    edit = sub!!.edit()
-                    edit.putBoolean("logout", true)
-                    edit.apply()
-                    studentnamePrefernces!!.edit().clear().apply()
+                    sub!!.edit()!!.putBoolean("logout", true)
+                    sub!!.edit()!!.apply()
+                    studentNamePreferences!!.edit().clear().apply()
                     editor.putBoolean("close", false)
                     editor.apply()
                     //Clearing the saved data
@@ -635,8 +631,8 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                 startActivity(intent)
             }
             R.id.result -> if (sharedPreferences!!.getString(Constants.SHOWRESULT, "") == "0") {
-                val snackbar = Snackbar.make(mainLayout!!, "We will be back within 3-4 days", Snackbar.LENGTH_LONG)
-                snackbar.show()
+                val snackBar = Snackbar.make(mainLayout!!, "We will be back within 3-4 days", Snackbar.LENGTH_LONG)
+                snackBar.show()
             } else {
                 fetchResult()
             }
@@ -666,13 +662,17 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
             val converted = StringBuilder()
             var convertNext = true
             for (ch in text.toCharArray()) {
-                if (Character.isSpaceChar(ch)) {
-                    convertNext = true
-                } else if (convertNext) {
-                    ch = Character.toTitleCase(ch)
-                    convertNext = false
-                } else {
-                    ch = Character.toLowerCase(ch)
+                when {
+                    Character.isSpaceChar(ch) -> {
+                        convertNext = true
+                    }
+                    convertNext -> {
+                        ch = Character.toTitleCase(ch)
+                        convertNext = false
+                    }
+                    else -> {
+                        ch = Character.toLowerCase(ch)
+                    }
                 }
                 converted.append(ch)
             }
