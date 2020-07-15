@@ -2,12 +2,16 @@ package codex.codex_iter.www.awol.activity
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import codex.codex_iter.www.awol.R
@@ -22,7 +26,7 @@ import java.util.*
 
 class DetailedResultActivity : BaseThemedActivity() {
     private var msem: String? = null
-    var userm: SharedPreferences? = null
+    private var userm: SharedPreferences? = null
     private var result: String? = null
     private var l = 0
     private lateinit var detailResultData: Array<DetailResultData?>
@@ -46,11 +50,10 @@ class DetailedResultActivity : BaseThemedActivity() {
             msem = bundle.getString("Semester")
         }
         if (dark) {
-            toolbar.setTitleTextColor(resources.getColor(R.color.white))
+            toolbar.setTitleTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             recyclerView.setBackgroundColor(Color.parseColor("#141414"))
         } else {
-            toolbar.setTitleTextColor(resources.getColor(R.color.black))
-            Objects.requireNonNull(toolbar.navigationIcon).setColorFilter(resources.getColor(R.color.black), PorterDuff.Mode.SRC_ATOP)
+           myDrawableCompact()
         }
         userm = getSharedPreferences("user",
                 Context.MODE_PRIVATE)
@@ -105,7 +108,22 @@ class DetailedResultActivity : BaseThemedActivity() {
         }
     }
 
-    fun saveAttendance(attendanceDataArrayList: ArrayList<*>?, sem: String?) {
+    private fun myDrawableCompact() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(context,R.color.black),
+                        BlendMode.SRC_ATOP)
+            }
+        } else {
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.setColorFilter(ContextCompat.getColor(context,R.color.black), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+    }
+
+    private fun saveAttendance(attendanceDataArrayList: ArrayList<*>?, sem: String?) {
 //        SharedPreferences sharedPreferences = getApplication().getSharedPreferences("DetailResult", MODE_PRIVATE);
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
         Constants.offlineDataEditor = Constants.offlineDataPreference!!.edit()

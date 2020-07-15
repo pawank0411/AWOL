@@ -4,15 +4,18 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
-import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -36,8 +39,6 @@ class OnlineLectureSubjects : BaseThemedActivity(), OnlineLectureSubjectAdapter.
     @BindView(R.id.toolbar)
     var toolbar: Toolbar? = null
 
-    @BindView(R.id.main_Layout)
-    var main_layout: ConstraintLayout? = null
     private val subjectName = ArrayList<Lecture>()
     private val subjectLinks = ArrayList<Lecture>()
     private var sharedPreferences: SharedPreferences? = null
@@ -54,21 +55,22 @@ class OnlineLectureSubjects : BaseThemedActivity(), OnlineLectureSubjectAdapter.
         jsonSubjectNames = Utils.getJsonFromStorage(applicationContext, "data.txt")
         sharedPreferences = getSharedPreferences(Constants.STUDENT_NAME, Context.MODE_PRIVATE)
         setSupportActionBar(toolbar)
-        Objects.requireNonNull(supportActionBar).setTitle("Video Lectures")
-        Objects.requireNonNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-        Objects.requireNonNull(supportActionBar).elevation = 0f
-        Objects.requireNonNull(supportActionBar).setDisplayShowHomeEnabled(true)
+        supportActionBar?.apply {
+            title = "Video Lectures"
+            setDisplayHomeAsUpEnabled(true)
+            elevation = 0f
+            setDisplayShowHomeEnabled(true)
+        }
         if (dark) {
-            toolbar!!.setTitleTextColor(resources.getColor(R.color.white))
+            toolbar!!.setTitleTextColor(ContextCompat.getColor(applicationContext,R.color.white))
             recyclerView!!.setBackgroundColor(Color.parseColor("#141414"))
         } else {
-            toolbar!!.setTitleTextColor(resources.getColor(R.color.black))
-            Objects.requireNonNull(toolbar!!.navigationIcon).setColorFilter(resources.getColor(R.color.black), PorterDuff.Mode.SRC_ATOP)
+            myDrawableCompact()
         }
-        branch = sharedPreferences.getString(Constants.STUDENTBRANCH, "")
+        branch = sharedPreferences!!.getString(Constants.STUDENTBRANCH, "")
         if (bundle != null) {
             val sem = bundle.getString(Constants.STUDENTSEMESTER)
-            sharedPreferences.edit().putString(Constants.STUDENTSEMESTER, sem).apply()
+            sharedPreferences!!.edit().putString(Constants.STUDENTSEMESTER, sem).apply()
         }
         getJSONdata("")
         val lecturesAdapter = OnlineLectureSubjectAdapter(this, subjectName, false, this)
@@ -83,11 +85,11 @@ class OnlineLectureSubjects : BaseThemedActivity(), OnlineLectureSubjectAdapter.
             subjectName.clear()
             subjectLinks.clear()
             if (jsonVideosLinks != null && jsonSubjectNames != null && !jsonSubjectNames!!.isEmpty() && !jsonVideosLinks!!.isEmpty()) {
-                val lectures = JSONObject(jsonVideosLinks)
-                val subject = JSONObject(jsonSubjectNames)
+                val lectures = JSONObject(jsonVideosLinks.toString())
+                val subject = JSONObject(jsonSubjectNames.toString())
                 val semester = arrayOf("2nd", "3rd", "4th", "5th", "6th", "7th", "8th")
                 for (s in semester) {
-                    if (Objects.requireNonNull(sharedPreferences!!.getString(Constants.STUDENTSEMESTER, null)).trim { it <= ' ' } == s) {
+                    if (Objects.requireNonNull(sharedPreferences!!.getString(Constants.STUDENTSEMESTER, null)).toString().trim { it <= ' ' } == s) {
                         val subjects = lectures.getJSONObject(s)
                         val su = subject.getJSONObject(s)
                         val key_subject = su.keys()
@@ -104,7 +106,7 @@ class OnlineLectureSubjects : BaseThemedActivity(), OnlineLectureSubjectAdapter.
                                         if (keysubject == subjectsname[i]) {
                                             val links = subjects.getJSONArray(keysubject)
                                             subjectName.add(Lecture(keysubject))
-                                            if (subname == keysubject && !subname.isEmpty()) {
+                                            if (subname == keysubject && subname!!.isNotEmpty()) {
                                                 subjectLinks.clear()
                                                 for (j in 0 until links.length()) {
                                                     val json = links.getJSONObject(j)
@@ -137,7 +139,22 @@ class OnlineLectureSubjects : BaseThemedActivity(), OnlineLectureSubjectAdapter.
         }
     }
 
-    fun showBottomSheetDialog() {
+    private fun myDrawableCompact() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(context,R.color.black),
+                        BlendMode.SRC_ATOP)
+            }
+        } else {
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.setColorFilter(ContextCompat.getColor(context,R.color.black), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+    }
+
+    private fun showBottomSheetDialog() {
         //    private BottomSheetBehavior bottomSheetBehavior;
         @SuppressLint("InflateParams") val view = layoutInflater.inflate(R.layout.bottomprogressbar, null)
         if (dialog == null) {
@@ -148,7 +165,7 @@ class OnlineLectureSubjects : BaseThemedActivity(), OnlineLectureSubjectAdapter.
         dialog!!.show()
     }
 
-    fun hideBottomSheetDialog() {
+    private fun hideBottomSheetDialog() {
         if (dialog != null && dialog!!.isShowing) {
             dialog!!.dismiss()
         }
