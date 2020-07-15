@@ -25,7 +25,7 @@ class DetailedResultActivity : BaseThemedActivity() {
     var userm: SharedPreferences? = null
     private var result: String? = null
     private var l = 0
-    private var detailResultData: Array<DetailResultData?>
+    private lateinit var detailResultData: Array<DetailResultData?>
     private var detailResultDataArrayList: ArrayList<DetailResultData>? = ArrayList()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,14 +34,14 @@ class DetailedResultActivity : BaseThemedActivity() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerViewDetailedResult)
         setSupportActionBar(toolbar)
-        Objects.requireNonNull(supportActionBar).setTitle("Results")
-        Objects.requireNonNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-        Objects.requireNonNull(supportActionBar).elevation = 0f
-        Objects.requireNonNull(supportActionBar).setDisplayShowHomeEnabled(true)
+        supportActionBar?.apply {
+            title = "Results"
+            setDisplayHomeAsUpEnabled(true)
+            elevation = 0f
+            setDisplayShowHomeEnabled(true)
+        }
+
         if (bundle != null) {
-            val mearnedCredits = bundle.getString("TotalCredit")
-            val msgpa = bundle.getString("SGPA")
-            val mstatus = bundle.getString("Status")
             result = bundle.getString(Constants.RESULTS)
             msem = bundle.getString("Semester")
         }
@@ -61,13 +61,12 @@ class DetailedResultActivity : BaseThemedActivity() {
         try {
             var jObj1: JSONObject? = null
             if (result != null) {
-                jObj1 = JSONObject(result)
+                jObj1 = JSONObject(result.toString())
                 Log.d("resultdetail", jObj1.toString())
             }
             var arr: JSONArray? = null
             if (jObj1 != null) {
-                val jOj2: JSONObject
-                jOj2 = jObj1.getJSONObject(msem)
+                val jOj2: JSONObject = jObj1.getJSONObject(msem.toString())
                 arr = jOj2.getJSONArray("Semdata")
                 Log.d("resultdetail", arr.toString())
             }
@@ -82,17 +81,17 @@ class DetailedResultActivity : BaseThemedActivity() {
                 }
                 detailResultData[i] = DetailResultData()
                 if (jObj != null) {
-                    detailResultData[i].setSubjectdesc(jObj.getString("subjectdesc"))
-                    detailResultData[i].setGrade(jObj.getString("grade"))
-                    detailResultData[i].setEarnedcredit(jObj.getString("earnedcredit"))
-                    detailResultData[i].setSubjectcode(jObj.getString("subjectcode"))
+                    detailResultData[i]!!.subjectDesc = jObj.getString("subjectdesc")
+                    detailResultData[i]!!.grade = jObj.getString("grade")
+                    detailResultData[i]!!.earnedCredit = jObj.getString("earnedcredit")
+                    detailResultData[i]!!.subjectCode = jObj.getString("subjectcode")
                 }
             }
         } catch (e: Exception) {
             e.printStackTrace()
             Log.d("Error : ", e.toString())
         } finally {
-            DetailResultData.Companion.detailResultData = detailResultData
+            DetailResultData.detailResultData = detailResultData
             if (!Constants.Offlin_mode) {
                 detailResultDataArrayList!!.addAll(Arrays.asList(*detailResultData).subList(0, l))
                 saveAttendance(detailResultDataArrayList, msem)
@@ -112,8 +111,8 @@ class DetailedResultActivity : BaseThemedActivity() {
         Constants.offlineDataEditor = Constants.offlineDataPreference!!.edit()
         val gson = Gson()
         val json = gson.toJson(attendanceDataArrayList)
-        Constants.offlineDataEditor.putString("StudentDetailResult$sem", json)
-        Constants.offlineDataEditor.apply()
+        Constants.offlineDataEditor!!.putString("StudentDetailResult$sem", json)
+        Constants.offlineDataEditor!!.apply()
     }
 
     fun getSavedAttendance(sem: String?) {
