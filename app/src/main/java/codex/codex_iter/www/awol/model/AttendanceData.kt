@@ -4,6 +4,11 @@ import java.util.*
 import kotlin.math.floor
 
 class AttendanceData {
+
+    companion object {
+        var attendanceData = AttendanceData[]
+    }
+
     var sub: String? = null
     private var code: String? = null
     var upd: String? = null
@@ -12,7 +17,7 @@ class AttendanceData {
         private set
     var lab: String? = null
         private set
-    private var percent: String? = null
+    var percent: String? = null
     var that = ""
     var labt = ""
     var old = ""
@@ -31,20 +36,28 @@ class AttendanceData {
             return if (d < 65) 1 else if (d >= 65 && d < 75) 2 else if (d >= 75 && d < 90) 3 else 4
         }
 
-    fun setSubjectCode (code: String) {
+    fun getClasses() {
+        (thT + lat).toString()
+    }
+
+    fun setSubjectCode(code: String) {
         this.code = code
     }
 
-    fun setOldAttendance (old: String) {
+    fun setOldAttendance(old: String) {
         this.old = old
     }
 
-    fun setSubject (subject: String) {
+    fun setSubject(subject: String) {
         this.sub = subject
     }
 
-    fun setUpdate (upd : String){
+    fun setUpdate(upd: String) {
         this.upd = upd
+    }
+
+    fun getSubject() {
+        sub
     }
 
     fun setTheory(theory: String) {
@@ -81,16 +94,17 @@ class AttendanceData {
     fun getAbsent(): Int {
         return floor(lat + thT - thp - lap).toInt()
     }
-    private fun getPercent(): String? {
+
+    private fun getSubjectPercent(): String? {
         return percent
     }
 
-    fun setPercent(percent: String?) {
+    fun setSubjectPercent(percent: String?) {
         this.percent = String.format(Locale.US, "%.1f", Scanner(percent).nextDouble())
     }
 
     fun setBunk() {
-        val percentClass = getPercent()!!.toDouble()
+        val percentClass = getSubjectPercent()!!.toDouble()
         val totalClass = classes.toDouble()
         val absent = absent!!.toDouble()
         val present = totalClass - absent
@@ -128,4 +142,5 @@ class AttendanceData {
             }
         }
     }
+
 }
