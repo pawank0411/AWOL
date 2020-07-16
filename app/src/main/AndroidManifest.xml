@@ -90,7 +90,7 @@
             android:configChanges="keyboardHidden|orientation|screenSize" />
 
         <receiver
-            android:name="codex.codex_iter.www.awol.reciever.AlramReceiver"
+            android:name="codex.codex_iter.www.awol.reciever.AlarmReceiver"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

@@ -5,13 +5,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.res.Resources
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.LinearLayout
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import butterknife.BindView
@@ -31,6 +35,7 @@ import com.google.gson.reflect.TypeToken
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
+import kotlin.math.roundToInt
 
 class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
     @BindView(R.id.toolbar)
@@ -41,10 +46,10 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
 
     @BindView(R.id.recyclerViewDetailedResult)
     var recyclerView: RecyclerView? = null
-    var userm: SharedPreferences? = null
+    private var userm: SharedPreferences? = null
     private var result: String? = null
     private var l = 0
-    private var ld: Array<ResultData?>
+    private lateinit var ld: Array<ResultData?>
     private var resultDataArrayList: ArrayList<ResultData>? = ArrayList()
     private var sem = 0
     private var totalCredit: String? = null
@@ -58,19 +63,21 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
         Constants.offlineDataPreference = getSharedPreferences("OFFLINEDATA", Context.MODE_PRIVATE)
         ButterKnife.bind(this)
         setSupportActionBar(toolbar)
-        Objects.requireNonNull(supportActionBar).title = "Results"
-        Objects.requireNonNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-        Objects.requireNonNull(supportActionBar).elevation = 0f
-        Objects.requireNonNull(supportActionBar).setDisplayShowHomeEnabled(true)
+        supportActionBar?.apply {
+            title = "Results"
+            setDisplayHomeAsUpEnabled(true)
+            elevation = 0f
+            setDisplayShowHomeEnabled(true)
+        }
+
         userm = getSharedPreferences("user",
                 Context.MODE_PRIVATE)
         val bundle = intent.extras
         if (dark) {
-            toolbar!!.setTitleTextColor(resources.getColor(R.color.white))
+            toolbar!!.setTitleTextColor(ContextCompat.getColor(applicationContext, R.color.white))
             recyclerView!!.setBackgroundColor(Color.parseColor("#141414"))
         } else {
-            toolbar!!.setTitleTextColor(resources.getColor(R.color.black))
-            Objects.requireNonNull(toolbar!!.navigationIcon).setColorFilter(resources.getColor(R.color.black), PorterDuff.Mode.SRC_ATOP)
+            myDrawableCompact()
         }
         if (bundle != null) {
             result = bundle.getString(Constants.RESULTS)
@@ -102,13 +109,13 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
                 }
                 ld[i] = ResultData()
                 if (jObj != null) {
-                    ld[i].setSemesterdesc(jObj.getString("Semesterdesc"))
-                    ld[i].setStynumber(jObj.getString("stynumber").toInt())
-                    ld[i].setFail(jObj.getString("fail"))
-                    ld[i].setTotalearnedcredit(jObj.getString("totalearnedcredit"))
+                    ld[i]?.semesterDesc = jObj.getString("Semesterdesc")
+                    ld[i]?.styNumber = jObj.getString("stynumber").toInt()
+                    ld[i]?.fail = jObj.getString("fail")
+                    ld[i]?.totalearnedCredit = jObj.getString("totalearnedcredit")
                 }
-                ld[i].setSgpaR(jObj?.getString("sgpaR"))
-                ld[i].setCgpaR(jObj?.getString("cgpaR"))
+                ld[i]?.sgpaR = jObj?.getString("sgpaR")
+                ld[i]?.cgpaR = jObj?.getString("cgpaR")
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -116,7 +123,7 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
         } finally {
             ResultData.Companion.ld = ld
             if (!Constants.Offlin_mode) {
-                resultDataArrayList!!.addAll(Arrays.asList(*ld).subList(0, l))
+                resultDataArrayList!!.addAll(Arrays.asList(ld).subList(0, l))
             } else {
                 savedAttendance
             }
@@ -128,13 +135,28 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
         }
     }
 
+    private fun myDrawableCompact() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(context,R.color.black),
+                        BlendMode.SRC_ATOP)
+            }
+        } else {
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.setColorFilter(ContextCompat.getColor(context,R.color.black), PorterDuff.Mode.SRC_ATOP)
+            }
+        }
+    }
+
     @SuppressLint("CommitPrefEdits")
     fun saveAttendance(resultDataArrayList: ArrayList<*>?) {
         Constants.offlineDataEditor = Constants.offlineDataPreference!!.edit()
         val gson = Gson()
         val json = gson.toJson(resultDataArrayList)
-        Constants.offlineDataEditor.putString("StudentResult", json)
-        Constants.offlineDataEditor.apply()
+        Constants.offlineDataEditor?.putString("StudentResult", json)
+        Constants.offlineDataEditor?.apply()
     }
 
     val savedAttendance: Unit
@@ -172,8 +194,9 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
                     } else {
                         hideBottomSheetDialog()
                         val intent = Intent(this@ResultActivity, DetailedResultActivity::class.java)
-                        response += "kkk" + param[1]
-                        intent.putExtra("result", response)
+                        var res = response
+                        res += "kkk" + param[1]
+                        intent.putExtra("result", res)
                         intent.putExtra("Semester", sem.toString())
                         intent.putExtra("SGPA", sgpa)
                         intent.putExtra("TotalCredit", totalCredit)
@@ -235,7 +258,7 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
         queue.add(postRequest)
     }
 
-    fun showBottomSheetDialog() {
+    private fun showBottomSheetDialog() {
         //    private BottomSheetBehavior bottomSheetBehavior;
         @SuppressLint("InflateParams") val view = layoutInflater.inflate(R.layout.bottomprogressbar, null)
         if (dialog == null) {
@@ -264,7 +287,7 @@ class ResultActivity : BaseThemedActivity(), ResultAdapter.OnItemClickListener {
         fun convertDpToPixel(dp: Float): Int {
             val metrics = Resources.getSystem().displayMetrics
             val px = dp * (metrics.densityDpi / 160f)
-            return Math.round(px)
+            return px.roundToInt()
         }
     }
 }

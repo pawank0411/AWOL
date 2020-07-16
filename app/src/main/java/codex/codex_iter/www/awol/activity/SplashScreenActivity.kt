@@ -27,18 +27,18 @@ class SplashScreenActivity : AppCompatActivity() {
         collectionReference.addSnapshotListener { queryDocumentSnapshots: QuerySnapshot?, e: FirebaseFirestoreException? ->
             if (queryDocumentSnapshots != null) {
                 for (documentChange in queryDocumentSnapshots.documentChanges) {
-                    check = Objects.requireNonNull(documentChange.document.getString("under_maintenance")).toInt()
-                    clear_data = Objects.requireNonNull(documentChange.document.getString("clear_data")).toInt()
-                    pref.edit().putInt("CHECK", check).apply()
-                    if (clear_data > pref.getInt("clear_data", 0)) {
+                    check = Objects.requireNonNull(documentChange.document.getString("under_maintenance")).toString().toInt()
+                    clear_data = Objects.requireNonNull(documentChange.document.getString("clear_data")).toString().toInt()
+                    pref!!.edit().putInt("CHECK", check).apply()
+                    if (clear_data > pref!!.getInt("clear_data", 0)) {
                         Toast.makeText(this, "Data Successfully cleared.", Toast.LENGTH_SHORT).show()
-                        pref.edit().putInt("clear_data", clear_data).apply()
-                        CleanCacheApplication.Companion.getInstance().clearApplicationData()
+                        pref!!.edit().putInt("clear_data", clear_data).apply()
+                        CleanCacheApplication.getInstance().clearApplicationData()
                     }
                 }
             }
         }
-        if (pref.getInt("CHECK", 0) == 1) {
+        if (pref!!.getInt("CHECK", 0) == 1) {
             val intent = Intent(this@SplashScreenActivity, UnderMaintenance::class.java)
             startActivity(intent)
         } else {

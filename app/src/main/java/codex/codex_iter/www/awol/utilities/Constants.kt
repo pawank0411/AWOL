@@ -15,16 +15,16 @@ object Constants {
         get() {
             if (themeItems != null) return themeItems
             themeItems = ArrayList()
-            themeItems.add(ThemeItem(R.color.grey50, R.style.AppTheme_NoActionBar, false))
-            themeItems.add(ThemeItem(R.color.colorPrimaryDark, R.style.AppTheme_Dark_NoActionBar, true))
-            themeItems.add(ThemeItem(R.color.red, R.style.AppTheme_NoActionBar_Red, false))
-            themeItems.add(ThemeItem(R.color.red, R.style.AppTheme_Dark_NoActionBar_Red, true))
-            themeItems.add(ThemeItem(R.color.orange, R.style.AppTheme_NoActionBar_Orange, false))
-            themeItems.add(ThemeItem(R.color.orange, R.style.AppTheme_Dark_NoActionBar_Orange, true))
-            themeItems.add(ThemeItem(R.color.blue, R.style.AppTheme_NoActionBar_Blue, false))
-            themeItems.add(ThemeItem(R.color.blue, R.style.AppTheme_Dark_NoActionBar_Blue, true))
-            themeItems.add(ThemeItem(R.color.green, R.style.AppTheme_NoActionBar_Green, false))
-            themeItems.add(ThemeItem(R.color.green, R.style.AppTheme_Dark_NoActionBar_Green, true))
+            themeItems!!.add(ThemeItem(R.color.grey50, R.style.AppTheme_NoActionBar, false))
+            themeItems!!.add(ThemeItem(R.color.colorPrimaryDark, R.style.AppTheme_Dark_NoActionBar, true))
+            themeItems!!.add(ThemeItem(R.color.red, R.style.AppTheme_NoActionBar_Red, false))
+            themeItems!!.add(ThemeItem(R.color.red, R.style.AppTheme_Dark_NoActionBar_Red, true))
+            themeItems!!.add(ThemeItem(R.color.orange, R.style.AppTheme_NoActionBar_Orange, false))
+            themeItems!!.add(ThemeItem(R.color.orange, R.style.AppTheme_Dark_NoActionBar_Orange, true))
+            themeItems!!.add(ThemeItem(R.color.blue, R.style.AppTheme_NoActionBar_Blue, false))
+            themeItems!!.add(ThemeItem(R.color.blue, R.style.AppTheme_Dark_NoActionBar_Blue, true))
+            themeItems!!.add(ThemeItem(R.color.green, R.style.AppTheme_NoActionBar_Green, false))
+            themeItems!!.add(ThemeItem(R.color.green, R.style.AppTheme_Dark_NoActionBar_Green, true))
             return themeItems
         }
 

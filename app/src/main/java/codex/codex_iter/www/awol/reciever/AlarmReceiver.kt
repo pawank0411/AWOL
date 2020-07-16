@@ -18,7 +18,7 @@ import codex.codex_iter.www.awol.R
 import java.text.SimpleDateFormat
 import java.util.*
 
-class AlramReceiver : BroadcastReceiver() {
+class AlarmReceiver : BroadcastReceiver() {
     private var notificationBuilder: NotificationCompat.Builder? = null
     private val notificationId = 100
     private val CHANNEL_ID = "my_channel_01"
@@ -67,8 +67,8 @@ class AlramReceiver : BroadcastReceiver() {
                             .setColor(Color.parseColor("#12921F"))
                             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                             .setAutoCancel(true)
-                    notificationManager?.createNotificationChannel(mChannel)
-                    notificationManager?.notify(notificationId, notificationBuilder.build())
+                    notificationManager.createNotificationChannel(mChannel)
+                    notificationManager.notify(notificationId, notificationBuilder!!.build())
                     Log.v(ContentValues.TAG, "Notification sent")
                     val simpleDat = SimpleDateFormat("dd-MM-yyyy", Locale.US)
                     val date_fired = simpleDat.format(date)
@@ -93,7 +93,7 @@ class AlramReceiver : BroadcastReceiver() {
                             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
                             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                             .setAutoCancel(true)
-                    notificationManager?.notify(notificationId, notificationBuilder.build())
+                    notificationManager.notify(notificationId, notificationBuilder!!.build())
                     Log.v(ContentValues.TAG, "Notification sent")
                     val simpleDat = SimpleDateFormat("dd-MM-yyyy", Locale.US)
                     val date_fired = simpleDat.format(date)
@@ -118,7 +118,7 @@ class AlramReceiver : BroadcastReceiver() {
                             .setVibrate(longArrayOf(1000, 1000, 1000, 1000, 1000))
                             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
                             .setAutoCancel(true)
-                    notificationManager?.notify(notificationId, notificationBuilder.build())
+                    notificationManager.notify(notificationId, notificationBuilder!!.build())
                     val simpleDat = SimpleDateFormat("dd-MM-yyyy", Locale.US)
                     val date_fired = simpleDat.format(date)
                     editor.putString("Date", date_fired)

@@ -30,25 +30,24 @@ class ThemeFragment : BottomSheetDialogFragment() {
     private var items: List<ThemeItem?>? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.theme_select_layout, container, false)
-        items = Constants.getThemes()
+        items = Constants.themes
         preferences = requireActivity().getSharedPreferences("theme", 0)
-        isDark = preferences.getBoolean(PREF_DARK_THEME, false)
+        isDark = preferences!!.getBoolean(PREF_DARK_THEME, false)
         (view.findViewById<View>(R.id.title) as TextView).setTextColor(if (isDark) Color.WHITE else Color.BLACK)
         val recyclerView: RecyclerView = view.findViewById(R.id.theme_list)
-        val selectedPosition: Int
-        selectedPosition = if (activity != null) preferences.getInt(POSITION, 0) else 0
+        val selectedPosition: Int = if (activity != null) preferences!!.getInt(POSITION, 0) else 0
         val adapter = ThemeAdapter(items, selectedPosition, isDark)
         recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         recyclerView.adapter = adapter
         val apply = view.findViewById<Button>(R.id.apply_btn)
         apply.setOnClickListener { view1: View? ->
-            val editor = preferences.edit()
-            val item = items!![adapter.getSelectedPosition()]
-            editor.putInt(POSITION, adapter.getSelectedPosition())
-            editor.putInt(THEME, item.getTheme())
-            editor.putBoolean(PREF_DARK_THEME, item!!.isDark)
+            val editor = preferences!!.edit()
+            val item = items!![adapter.selectedPosition]
+            editor.putInt(POSITION, adapter.selectedPosition)
+            editor.putInt(THEME, item!!.theme)
+            editor.putBoolean(PREF_DARK_THEME, item.isDark)
             editor.apply()
-            if (activity != null) activity!!.recreate()
+            if (activity != null) requireActivity().recreate()
         }
         return view
     }
@@ -93,7 +92,6 @@ class ThemeFragment : BottomSheetDialogFragment() {
         return dialog
     }
 
-    interface Callback
     companion object {
         private const val POSITION = "position"
         private const val PREF_DARK_THEME = "dark_theme"

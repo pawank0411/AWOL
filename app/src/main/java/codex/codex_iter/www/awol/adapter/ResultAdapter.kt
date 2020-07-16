@@ -23,12 +23,12 @@ class ResultAdapter(private val ctx: Context, private val resultData: List<Resul
     override fun onBindViewHolder(holder: ResultHolder, position: Int) {
         val theme = ctx.getSharedPreferences("theme", 0)
         val dark = theme.getBoolean("dark_theme", false)
-        holder.semTextView.text = resultData!![position].stynumber.toString()
-        holder.creditsTextView.text = resultData[position].totalearnedcredit
+        holder.semTextView.text = resultData!![position].styNumber.toString()
+        holder.creditsTextView.text = resultData[position].totalearnedCredit
         holder.sgpaTextView.text = resultData[position].sgpaR
         holder.cgpaTextView.text = resultData[position].cgpaR
-        val currSGPA = resultData[position].sgpaR.toDouble()
-        if (currSGPA >= 8.5 && currSGPA <= 10.0) {
+        val currSGPA = resultData[position].sgpaR.toString().toDouble()
+        if (currSGPA in 8.5..10.0) {
             //excellent
             holder.imageViewResultEmotion.setImageResource(R.drawable.ic_excellent)
         } else if (currSGPA >= 7.0 && currSGPA < 8.5) {
@@ -41,8 +41,8 @@ class ResultAdapter(private val ctx: Context, private val resultData: List<Resul
             //poor
             holder.imageViewResultEmotion.setImageResource(R.drawable.ic_poor)
         }
-        holder.cardView.setOnClickListener { view: View? ->
-            listener?.onResultClicked(resultData[position].stynumber, resultData[position].totalearnedcredit,
+        holder.cardView.setOnClickListener {
+            listener?.onResultClicked(resultData[position].styNumber, resultData[position].totalearnedCredit,
                     resultData[position].fail, resultData[position].sgpaR)
         }
         if (!dark) {

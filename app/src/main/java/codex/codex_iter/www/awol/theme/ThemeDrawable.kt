@@ -8,20 +8,22 @@ import android.graphics.Rect
 import android.util.AttributeSet
 import android.util.Log
 import android.view.View
+import androidx.core.content.ContextCompat
 import codex.codex_iter.www.awol.R
+import kotlin.math.roundToInt
 
 class ThemeDrawable @JvmOverloads constructor(context: Context?, attrs: AttributeSet? = null, defStyleAttr: Int = 0) : View(context, attrs, defStyleAttr) {
     private var primaryColor = 0
     private var background = 0
     private var isDark = false
     private var isBackgroundDark = false
-    var path1: Path
-    var path2: Path
-    var fill: Paint
-    var lightBackground: Int
-    var darkBackground: Int
-    var strokeWidth: Int
-    var border: Rect
+    private var path1: Path = Path()
+    private var path2: Path = Path()
+    private var fill: Paint = Paint()
+    private var lightBackground: Int
+    private var darkBackground: Int
+    private var strokeWidth: Int
+    private var border: Rect
     override fun onDraw(canvas: Canvas) {
         //super.onDraw(canvas);
         fill.style = Paint.Style.FILL
@@ -39,7 +41,7 @@ class ThemeDrawable @JvmOverloads constructor(context: Context?, attrs: Attribut
 
     fun setColor(primaryColor: Int, isDark: Boolean, isBackgroundDark: Boolean) {
         //  Log.d("SETCOLOR", "setColor: "+(primaryColor));
-        this.primaryColor = resources.getColor(primaryColor)
+        this.primaryColor = ContextCompat.getColor(context, primaryColor)
         background = if (isDark) darkBackground else lightBackground
         this.isDark = isDark
         this.isBackgroundDark = isBackgroundDark
@@ -48,10 +50,10 @@ class ThemeDrawable @JvmOverloads constructor(context: Context?, attrs: Attribut
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
         Log.d("WIDTH", "onSizeChanged: $w     $h")
-        val threeFourthHeight = Math.round(h / 2.toFloat())
-        val threeFourthWidth = Math.round(w / 2.toFloat())
+        val threeFourthHeight = (h / 2.toFloat()).roundToInt()
+        val threeFourthWidth = (w / 2.toFloat()).roundToInt()
         Log.d("WIDTH", "onSizeChanged: $threeFourthHeight     $threeFourthWidth")
-        val halfStrokeWidth = Math.round(strokeWidth / 2.toFloat())
+        val halfStrokeWidth = (strokeWidth / 2.toFloat()).roundToInt()
         border.left = halfStrokeWidth
         border.top = halfStrokeWidth
         border.right = w - halfStrokeWidth
@@ -70,13 +72,10 @@ class ThemeDrawable @JvmOverloads constructor(context: Context?, attrs: Attribut
     }
 
     init {
-        path1 = Path()
-        path2 = Path()
-        fill = Paint()
         fill.style = Paint.Style.FILL
-        lightBackground = resources.getColor(R.color.lightBackground)
-        darkBackground = resources.getColor(R.color.darkBackground)
+        lightBackground = context?.let { ContextCompat.getColor(it, R.color.lightBackground) }!!
+        darkBackground = ContextCompat.getColor(context, R.color.darkBackground)
         border = Rect(0, 0, 0, 0)
-        strokeWidth = Math.round(resources.displayMetrics.density * 1)
+        strokeWidth = (resources.displayMetrics.density * 1).roundToInt()
     }
 }

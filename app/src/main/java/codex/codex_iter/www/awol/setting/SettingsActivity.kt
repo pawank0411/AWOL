@@ -1,10 +1,14 @@
 package codex.codex_iter.www.awol.setting
 
 import android.content.Context
+import android.graphics.BlendMode
+import android.graphics.BlendModeColorFilter
 import android.graphics.PorterDuff
+import android.os.Build
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import codex.codex_iter.www.awol.R
 import codex.codex_iter.www.awol.activity.BaseThemedActivity
 import java.util.*
@@ -28,20 +32,37 @@ class SettingsActivity : BaseThemedActivity() {
     private fun setupToolbar() {
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
-        Objects.requireNonNull(supportActionBar).title = "Settings"
-        Objects.requireNonNull(supportActionBar).setDisplayHomeAsUpEnabled(true)
-        Objects.requireNonNull(supportActionBar).elevation = 0f
-        Objects.requireNonNull(supportActionBar).setDisplayShowHomeEnabled(true)
+        supportActionBar?.apply {
+            title = "Setting"
+            setDisplayHomeAsUpEnabled(true)
+            elevation = 0f
+            setDisplayShowHomeEnabled(true)
+        }
+
         val preferences = getSharedPreferences("Dark", Context.MODE_PRIVATE)
         val editor = preferences.edit()
         if (!dark) {
             editor.putBoolean("dark", true)
             editor.apply()
-            toolbar.setTitleTextColor(resources.getColor(R.color.black))
-            Objects.requireNonNull(toolbar.navigationIcon).setColorFilter(resources.getColor(R.color.black), PorterDuff.Mode.SRC_ATOP)
+            myDrawableCompact()
         } else {
             editor.putBoolean("dark", false)
             editor.apply()
+        }
+    }
+
+    private fun myDrawableCompact() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q){
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.colorFilter = BlendModeColorFilter(ContextCompat.getColor(context,R.color.black),
+                        BlendMode.SRC_ATOP)
+            }
+        } else {
+            findViewById<Toolbar>(R.id.toolbar)?.apply {
+                setTitleTextColor(ContextCompat.getColor(context,R.color.black))
+                navigationIcon?.setColorFilter(ContextCompat.getColor(context,R.color.black), PorterDuff.Mode.SRC_ATOP)
+            }
         }
     }
 

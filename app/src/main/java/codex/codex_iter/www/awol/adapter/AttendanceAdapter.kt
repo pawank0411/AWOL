@@ -64,9 +64,9 @@ class AttendanceAdapter(private val ctx: Context, private val datalist: List<Att
         holder.lu.text = datalist[position].upd
         holder.th.text = datalist[position].theory + datalist[position].that
         holder.prac.text = datalist[position].lab + datalist[position].labt
-        holder.ab.text = datalist[position].absent
+        holder.ab.text = datalist[position].absent.toString()
         holder.tc.text = datalist[position].classes
-        holder.bunk_text.text = datalist[position].bunk_text_str
+        holder.bunk_text.text = datalist[position].bunkTextStr
         if (!dark) {
             holder.cardView.setCardBackgroundColor(Color.parseColor("#FFFFFF"))
             holder.ta.setTextColor(Color.parseColor("#141831"))

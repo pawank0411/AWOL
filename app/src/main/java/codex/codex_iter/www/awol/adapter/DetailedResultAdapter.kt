@@ -21,10 +21,10 @@ class DetailedResultAdapter(private val ctx: Context, private val detailResultDa
     override fun onBindViewHolder(holder: DetailViewHolder, position: Int) {
         val theme = ctx.getSharedPreferences("theme", 0)
         val dark = theme.getBoolean("dark_theme", false)
-        holder.textViewSubName.text = detailResultData!![position].subjectdesc
-        holder.textViewSubCode.text = detailResultData[position].subjectcode
+        holder.textViewSubName.text = detailResultData!![position].subjectDesc
+        holder.textViewSubCode.text = detailResultData[position].subjectCode
         holder.textViewGrade.text = detailResultData[position].grade
-        holder.textViewIndvCredits.text = detailResultData[position].earnedcredit
+        holder.textViewIndvCredits.text = detailResultData[position].earnedCredit
         if (!dark) {
             holder.textViewSubCode.setTextColor(Color.parseColor("#141831"))
             holder.textViewGrade.setTextColor(Color.parseColor("#141831"))

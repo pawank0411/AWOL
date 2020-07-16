@@ -289,7 +289,7 @@ class AttendanceActivity : BaseThemedActivity(), NavigationView.OnNavigationItem
                 attendanceData[i]!!.setTheory(jObj.getString("Latt"))
                 attendanceData[i]!!.setLab(jObj.getString("Patt"))
                 attendanceData[i]!!.setUpdate(ck)
-                attendanceData[i]!!.setPercent(jObj.getString("TotalAttandence"))
+                attendanceData[i]!!.setSubjectPercent(jObj.getString("TotalAttandence"))
                 attendanceData[i]!!.setBunk()
                 avgat += jObj.getString("TotalAttandence").trim { it <= ' ' }.toDouble()
                 avgab += attendanceData[i]!!.getAbsent()

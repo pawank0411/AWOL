@@ -56,18 +56,20 @@ class VideoPlayer : AppCompatActivity() {
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         playerView = findViewById(R.id.exo_player_view)
         progressBar = findViewById(R.id.progress_bar)
-        fullScreenButton = playerView.findViewById(R.id.exo_fullscreen_button)
+        fullScreenButton = playerView!!.findViewById(R.id.exo_fullscreen_button)
         errorMessage = findViewById(R.id.error_message)
-        networkChangeReceiver = NetworkChangeReceiver(NetworkChangeListener { isConnected: Boolean ->
-            if (isConnected && errorMessage.getVisibility() == View.VISIBLE) {
-                if (runnableCalled && player != null && mediaSource != null) {
-                    player!!.retry()
+        networkChangeReceiver = NetworkChangeReceiver(object : NetworkChangeListener {
+            override fun onNetworkChanged(isConnected: Boolean) {
+                if (isConnected && errorMessage!!.visibility == View.VISIBLE) {
+                    if (runnableCalled && player != null && mediaSource != null) {
+                        player!!.retry()
+                    } else {
+                        releasePlayer()
+                        initExoPlayer()
+                    }
                 } else {
-                    releasePlayer()
-                    initExoPlayer()
+                    setInit()
                 }
-            } else {
-                setInit()
             }
         })
         if (!isConnected(this)) {
@@ -147,6 +149,9 @@ class VideoPlayer : AppCompatActivity() {
                         errorMessage!!.text = ""
                     }
                     ExoPlayer.STATE_ENDED -> {
+                    }
+                    Player.STATE_IDLE -> {
+                        TODO()
                     }
                 }
             }
@@ -293,17 +298,4 @@ class VideoPlayer : AppCompatActivity() {
 
     }
 
-    fun isConnectedToWifi(context: Context): Boolean {
-        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-                ?: return false
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val network = connectivityManager.activeNetwork
-            val capabilities = connectivityManager.getNetworkCapabilities(network) ?: return false
-            capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-        } else {
-            val networkInfo = connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI)
-                    ?: return false
-            networkInfo.isConnected
-        }
-    }
 }

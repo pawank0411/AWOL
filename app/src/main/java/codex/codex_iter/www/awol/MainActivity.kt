@@ -23,7 +23,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import butterknife.BindView
 import butterknife.ButterKnife
-import codex.codex_iter.www.awol.MainActivity
 import codex.codex_iter.www.awol.activity.AttendanceActivity
 import codex.codex_iter.www.awol.activity.BaseThemedActivity
 import codex.codex_iter.www.awol.utilities.Constants
@@ -35,7 +34,6 @@ import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.BottomSheetCallback
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.TextInputLayout
-import com.google.android.material.textview.MaterialTextView
 import com.google.android.play.core.appupdate.AppUpdateManager
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.FirebaseFirestoreException
@@ -45,6 +43,7 @@ import com.onesignal.OneSignal
 import org.json.JSONException
 import org.json.JSONObject
 import java.util.*
+import kotlin.math.roundToInt
 
 class MainActivity : BaseThemedActivity() {
     @BindView(R.id.mainLayout)
@@ -71,11 +70,6 @@ class MainActivity : BaseThemedActivity() {
     @BindView(R.id.hello)
     var welcomeMessage: TextView? = null
 
-    @BindView(R.id.manual)
-    var maual: MaterialTextView? = null
-
-    @BindView(R.id.manaul_layout)
-    var manual_layout: ConstraintLayout? = null
     private var userm: SharedPreferences? = null
     private var logout: SharedPreferences? = null
     private var apiUrl: SharedPreferences? = null
@@ -85,7 +79,7 @@ class MainActivity : BaseThemedActivity() {
     private var student_branch: String? = null
     private var api: String? = null
     private var new_message: String? = null
-    private override var preferences: SharedPreferences? = null
+    override var preferences: SharedPreferences? = null
     private var editor: SharedPreferences.Editor? = null
     private val appUpdateManager: AppUpdateManager? = null
     private var bottomSheetBehavior: BottomSheetBehavior<*>? = null
@@ -109,10 +103,10 @@ class MainActivity : BaseThemedActivity() {
         preferences = getSharedPreferences(Constants.STUDENT_NAME, Context.MODE_PRIVATE)
         apiUrl = getSharedPreferences(Constants.API, Context.MODE_PRIVATE)
         bottomSheetBehavior = BottomSheetBehavior.from<ConstraintLayout?>(bottomSheetView!!)
-        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_COLLAPSED)
+        bottomSheetBehavior!!.state = BottomSheetBehavior.STATE_COLLAPSED
         val handler = Handler()
-        handler.postDelayed({ bottomSheetBehavior.setPeekHeight(convertDpToPixel(600f)) }, 400)
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetCallback() {
+        handler.postDelayed({ bottomSheetBehavior!!.setPeekHeight(convertDpToPixel(600f)) }, 400)
+        bottomSheetBehavior!!.setBottomSheetCallback(object : BottomSheetCallback() {
             override fun onStateChanged(view: View, i: Int) {}
             override fun onSlide(view: View, v: Float) {}
         })
@@ -125,7 +119,7 @@ class MainActivity : BaseThemedActivity() {
         val editor = status_lg.edit()
         editor.putString("status", status)
         editor.apply()
-        login!!.setOnClickListener { view: View? ->
+        login!!.setOnClickListener {
             val u = user!!.text.toString().trim { it <= ' ' }
             val p = pass!!.text.toString().trim { it <= ' ' }
             if (u == "" || p == "") {
@@ -140,19 +134,19 @@ class MainActivity : BaseThemedActivity() {
                 user!!.isFocusable = false
                 pass!!.isFocusable = false
                 passLayout!!.isPasswordVisibilityToggleEnabled = false
-                if (!preferences.contains(Constants.STUDENT_NAME) || !preferences.contains(Constants.STUDENTBRANCH)) {
+                if (!preferences!!.contains(Constants.STUDENT_NAME) || !preferences!!.contains(Constants.STUDENTBRANCH)) {
                     getName(api!!, u, p)
                 } else {
                     getData(api, u, p)
                 }
-                edit = userm.edit()
-                edit.putString("user", u)
-                edit.putString(u + "pass", p)
-                edit.putString("pass", p)
-                edit.apply()
-                edit = logout.edit()
-                edit.putBoolean("logout", false)
-                edit.apply()
+                edit = userm!!.edit()
+                edit!!.putString("user", u)
+                edit!!.putString(u + "pass", p)
+                edit!!.putString("pass", p)
+                edit!!.apply()
+                edit = logout!!.edit()
+                edit!!.putBoolean("logout", false)
+                edit!!.apply()
             }
         }
         try {
@@ -166,12 +160,12 @@ class MainActivity : BaseThemedActivity() {
             if (queryDocumentSnapshots != null) {
                 for (documentChange in queryDocumentSnapshots.documentChanges) {
                     api = documentChange.document.getString(Constants.API)
-                    updated_version = Objects.requireNonNull(documentChange.document.getString("update_available")).toInt()
+                    updated_version = Objects.requireNonNull(documentChange.document.getString("update_available")).toString().toInt()
                     new_message = documentChange.document.getString("what's_new")
-                    edit = apiUrl.edit()
-                    edit.putString(Constants.API, api)
-                    edit.apply()
-                    if (updated_version > current_version && current_version > 0) {
+                    edit = apiUrl!!.edit()
+                    edit!!.putString(Constants.API, api)
+                    edit!!.apply()
+                    if (current_version in 1 until updated_version) {
                         askPermission()
                         val storageReference_data = FirebaseStorage.getInstance().reference.child("apk_version/").child("awol.apk")
                         storageReference_data.downloadUrl.addOnSuccessListener { uri: Uri ->
@@ -179,18 +173,14 @@ class MainActivity : BaseThemedActivity() {
                             downloadScrapFile.newDownload(uri.toString(), "awol", true, new_message)
                         }.addOnFailureListener { e1: Exception -> Log.e("error_version", e1.toString()) }
                     } else {
-                        autofill()
+                        autoFill()
                     }
                 }
             }
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
-    fun autofill() {
+    fun autoFill() {
         if (userm!!.contains("user") && userm!!.contains("pass") && logout!!.contains("logout") && !logout!!.getBoolean("logout", false)) {
             user!!.isFocusable = false
             pass!!.isFocusable = false
@@ -228,8 +218,9 @@ class MainActivity : BaseThemedActivity() {
                     } else {
                         //User exists and attendance too.
                         val intent = Intent(this@MainActivity, AttendanceActivity::class.java)
-                        response += "kkk" + param[1]
-                        intent.putExtra(Constants.RESULTS, response)
+                        var res = response
+                        res += "kkk" + param[1]
+                        intent.putExtra(Constants.RESULTS, res)
                         intent.putExtra(Constants.REGISTRATION_NUMBER, user!!.text.toString())
                         intent.putExtra(Constants.LOGIN, true)
                         intent.putExtra(Constants.STUDENT_NAME, studentName)
@@ -324,17 +315,17 @@ class MainActivity : BaseThemedActivity() {
         val postRequest: StringRequest = object : StringRequest(Method.POST, param[0] + "/studentinfo",
                 Response.Listener { response: String? ->
                     try {
-                        val jobj = JSONObject(response)
+                        val jobj = JSONObject(response.toString())
                         Log.d("response", jobj.toString())
                         val jarr = jobj.getJSONArray("detail")
                         val jobj1 = jarr.getJSONObject(0)
                         studentName = jobj1.getString("name")
                         student_branch = jobj1.getString(Constants.STUDENTBRANCH)
                         editor = preferences!!.edit()
-                        Log.d("branch_portal", student_branch)
-                        editor.putString(Constants.STUDENT_NAME, studentName)
-                        editor.putString(Constants.STUDENTBRANCH, student_branch)
-                        editor.apply()
+                        Log.d("branch_portal", student_branch.toString())
+                        editor!!.putString(Constants.STUDENT_NAME, studentName)
+                        editor!!.putString(Constants.STUDENTBRANCH, student_branch)
+                        editor!!.apply()
                         getData(api, param[1], param[2])
                     } catch (e: JSONException) {
                         Toast.makeText(this@MainActivity.applicationContext, "Cannot fetch name!!", Toast.LENGTH_SHORT).show()
@@ -346,8 +337,8 @@ class MainActivity : BaseThemedActivity() {
                     login!!.visibility = View.VISIBLE
                     passLayout!!.isPasswordVisibilityToggleEnabled = true
                     if (error is AuthFailureError) {
-                        val snackbar = Snackbar.make(mainLayout!!, "Wrong Credentials!", Snackbar.LENGTH_SHORT)
-                        snackbar.show()
+                        val snackBar = Snackbar.make(mainLayout!!, "Wrong Credentials!", Snackbar.LENGTH_SHORT)
+                        snackBar.show()
                     } else if (error is ServerError) {
                         if (Constants.offlineDataPreference!!.getString("StudentAttendance", null) == null) {
                             user!!.isEnabled = true
@@ -356,8 +347,8 @@ class MainActivity : BaseThemedActivity() {
                             user!!.isFocusable = true
                             pass!!.isFocusableInTouchMode = true
                             pass!!.isFocusable = true
-                            val snackbar = Snackbar.make(mainLayout!!, "Cannot connect to ITER servers right now. Try again with correct credentials.", Snackbar.LENGTH_SHORT)
-                            snackbar.show()
+                            val snackBar = Snackbar.make(mainLayout!!, "Cannot connect to ITER servers right now. Try again with correct credentials.", Snackbar.LENGTH_SHORT)
+                            snackBar.show()
                         } else {
                             Constants.Offlin_mode = true
                             val intent = Intent(this@MainActivity, AttendanceActivity::class.java)
@@ -371,8 +362,8 @@ class MainActivity : BaseThemedActivity() {
                             user!!.isFocusable = true
                             pass!!.isFocusableInTouchMode = true
                             pass!!.isFocusable = true
-                            val snackbar = Snackbar.make(mainLayout!!, "Cannot establish connection", Snackbar.LENGTH_SHORT)
-                            snackbar.show()
+                            val snackBar = Snackbar.make(mainLayout!!, "Cannot establish connection", Snackbar.LENGTH_SHORT)
+                            snackBar.show()
                         } else {
                             Constants.Offlin_mode = true
                             val intent = Intent(this@MainActivity, AttendanceActivity::class.java)
@@ -398,8 +389,8 @@ class MainActivity : BaseThemedActivity() {
                                 user!!.isFocusable = true
                                 pass!!.isFocusableInTouchMode = true
                                 pass!!.isFocusable = true
-                                val snackbar = Snackbar.make(mainLayout!!, "Cannot connect to ITER servers right now.Try again", Snackbar.LENGTH_SHORT)
-                                snackbar.show()
+                                val snackBar = Snackbar.make(mainLayout!!, "Cannot connect to ITER servers right now.Try again", Snackbar.LENGTH_SHORT)
+                                snackBar.show()
                                 track = false
                             } else {
                                 Constants.Offlin_mode = true
@@ -431,13 +422,13 @@ class MainActivity : BaseThemedActivity() {
                         .setTitle("Permission needed")
                         .setMessage("Please allow to access storage")
                         .setCancelable(false)
-                        .setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
+                        .setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                 requestPermissions(arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE,
                                         Manifest.permission.READ_EXTERNAL_STORAGE), EXTERNAL_STORAGE_PERMISSION_CODE)
                             }
                         }
-                        .setNegativeButton("Cancel") { dialog: DialogInterface, which: Int ->
+                        .setNegativeButton("Cancel") { dialog: DialogInterface, _: Int ->
                             dialog.dismiss()
                             finish()
                         }.create().show()
@@ -457,7 +448,7 @@ class MainActivity : BaseThemedActivity() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == EXTERNAL_STORAGE_PERMISSION_CODE) {
-            if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
                 Log.d("permission", "1")
             } else {
                 if (!ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) || !ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.READ_EXTERNAL_STORAGE)) {
@@ -465,7 +456,7 @@ class MainActivity : BaseThemedActivity() {
                             .setTitle("Permission needed")
                             .setMessage("Please allow to access storage. Press OK to enable in settings.")
                             .setCancelable(false)
-                            .setPositiveButton("OK") { dialog: DialogInterface?, which: Int ->
+                            .setPositiveButton("OK") { _: DialogInterface?, _: Int ->
                                 val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
                                 val uri = Uri.fromParts("package", packageName, null)
                                 intent.data = uri
@@ -502,7 +493,7 @@ class MainActivity : BaseThemedActivity() {
         fun convertDpToPixel(dp: Float): Int {
             val metrics = Resources.getSystem().displayMetrics
             val px = dp * (metrics.densityDpi / 160f)
-            return Math.round(px)
+            return px.roundToInt()
         }
     }
 }

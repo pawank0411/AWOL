@@ -21,8 +21,8 @@ class ThemeAdapter(var themes: List<ThemeItem?>?, var selectedPosition: Int, pri
             holder.selector.visibility = View.GONE
         }
         val item = themes!![position]
-        holder.preview.setColor(item.getMainColor(), item!!.isDark, isBackgroundDark)
-        holder.itemView.setOnClickListener { view: View? ->
+        holder.preview.setColor(item!!.mainColor, item!!.isDark, isBackgroundDark)
+        holder.itemView.setOnClickListener {
             val pos = selectedPosition
             selectedPosition = position
             notifyItemChanged(pos)
