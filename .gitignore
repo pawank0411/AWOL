@@ -1,4 +1,6 @@
 *.iml
+*.aab
+*.apk
 .gradle
 /local.properties
 /.idea/workspace.xml
@@ -7,6 +9,8 @@
 /build
 /captures
 .externalNativeBuild
-*.apk
 /app/src/main/new_app.jks
 /app/build
+./app/release
+./app/build
+./app/google-services.json
