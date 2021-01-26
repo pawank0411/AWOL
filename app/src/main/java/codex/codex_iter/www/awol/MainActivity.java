@@ -145,7 +145,10 @@ public class MainActivity extends AppCompatActivity implements InternetConnectiv
             if (username.isEmpty() || password.isEmpty()) {
                 Snackbar snackbar = Snackbar.make(activityMainBinding.mainLayout, "Enter your Details", Snackbar.LENGTH_SHORT);
                 snackbar.show();
-            } else if (api == null || api.isEmpty()) {
+            } else if (api == null) {
+                Snackbar snackbar = Snackbar.make(activityMainBinding.mainLayout, "Invalid Firebase Response", Snackbar.LENGTH_SHORT);
+                snackbar.show();
+            } else if (api.isEmpty()) {
                 Snackbar snackbar = Snackbar.make(activityMainBinding.mainLayout, "Invalid Firebase Response", Snackbar.LENGTH_SHORT);
                 snackbar.show();
             } else {
@@ -258,20 +261,23 @@ public class MainActivity extends AppCompatActivity implements InternetConnectiv
         if (mAuth == null) {
             mAuth = FirebaseAuth.getInstance();
         }
-        if (mAuth.getCurrentUser() != null) {
-            fetchDetails();
-        } else {
-            mAuth.signInAnonymously()
-                    .addOnCompleteListener(task -> {
-                        if (task.isSuccessful()) {
-                            Log.d("SignIn", "Successfully");
-                            fetchDetails();
-                        } else {
-                            Log.d("SignIn", Objects.requireNonNull(task.getException()).toString());
-                            Snackbar snackbar = Snackbar.make(activityMainBinding.mainLayout, "Oops, something went wrong! Please try after sometime", Snackbar.LENGTH_SHORT);
-                            snackbar.show();
-                        }
-                    });
+
+        if (mAuth != null) {
+            if (mAuth.getCurrentUser() != null) {
+                fetchDetails();
+            } else {
+                mAuth.signInAnonymously()
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()) {
+                                Log.d("SignIn", "Successfully");
+                                fetchDetails();
+                            } else {
+                                Log.d("SignIn", Objects.requireNonNull(task.getException()).toString());
+                                Snackbar snackbar = Snackbar.make(activityMainBinding.mainLayout, "Oops, something went wrong! Please try after sometime", Snackbar.LENGTH_SHORT);
+                                snackbar.show();
+                            }
+                        });
+            }
         }
     }
 
@@ -642,6 +648,8 @@ public class MainActivity extends AppCompatActivity implements InternetConnectiv
             if (isDownloading) {
                 FileDownloader(new_message, appLink);
             }
+        } else {
+            Toast.makeText(this, "No network connection found", Toast.LENGTH_LONG).show();
         }
     }
 
